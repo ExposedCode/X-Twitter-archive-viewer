@@ -8,7 +8,7 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 - [x] [Opera] Android version
 
 ## Version
-- 1.9 release version
+- 1.8 release version
 
 ## How to use
 - Download your X Twitter archives from menu Settings & Support > Settings and Privacy > Your Account > Download an archive of your data
