@@ -17,9 +17,9 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 
 # Update notes & bug fixes
 - v1.8 Added new features :
-    √ New JSON dataset on uncensored
+    - New JSON dataset on uncensored
       retweets (generate self documentary JSON datasets)
 - v1.7 Added new features :
-    √ New image description (generate self documentary JSON datasets)
+    - New image description (generate self documentary JSON datasets)
 - v1.5 Added features :
-    √ New multimedia filter menu
+    - New multimedia filter menu
