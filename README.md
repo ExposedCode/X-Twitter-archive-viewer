@@ -14,3 +14,12 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 - Download your X Twitter archives from menu Settings & Support > Settings and Privacy > Your Account > Download an archive of your data
 - Place these JSON files : [ account.js, profile.js, manifest.js, like.js, tweets.js, follower.js, following.js ]  profile_media & tweets_media folder inside data directory in this app
 - Run index.html on Opera browser using file:///storage/emulated/0/Your_Android_App_Folder/index.html
+
+# Updates notes
+- v1.8 Added new features :
+    √ New JSON dataset on uncensored
+      retweets (generate self documentary JSON datasets)
+- v1.7 Added new features :
+    √ New image description (generate self documentary JSON datasets)
+- v1.5 Added features :
+    √ New multimedia filter menu
