@@ -9,6 +9,12 @@ window.YTD = {
   "imgalt" : { "part0" : [] }
 }
 window.optStats = {
+  "total_tweets" : 0,
+  "tweet_count" : 0,
+  "reply_count" : 0,
+  "retweet_count" : 0,
+  "filtered_count" : 0,
+  "like_count" : 0,
   "enable_imgalt" : true,
   "orientation" : 0,
   "keywordHilite" : "#1DA1F2",
@@ -19,46 +25,21 @@ window.optStats = {
   "data_order" : "desc", // Default : desc
   "retweet_only" : false,
   "media_only" : false,
-  "text_only" : false,
-  "search_mode" : false,
   "displayPerPage" : 10,
   "iConnected" : window.navigator.onLine,
-  "cache" : [],
-  "stats" : {
-    "total_data" : 0,
-    "search" : {
-      "tweets" : {
-        "active" : false,
-        "keyword" : null,
-        "found" : 0
-      },
-      "replies" : {
-        "active" : false,
-        "keyword" : null,
-        "found" : 0
-      },
-      "likes" : {
-        "active" : false,
-        "keyword" : null,
-        "found" : 0
-      }
+  "search_term" : {
+    "tweets" : {
+      "keyword" : null,
+      "found" : 0
     },
-    "total_post" : 0,
-    "total_replies" : 0,
-    "total_retweet" : 0,
-    "total_likes" : 0,
-    "post_text" : 0,
-    "post_with_media" : 0,
-    "post_videos" : 0,
-    "post_images" : 0,
-    "retweet_text" : 0,
-    "retweet_with_media" : 0,
-    "retweet_videos" : 0,
-    "retweet_images" : 0,
-    "reply_text" : 0,
-    "reply_with_media" : 0,
-    "reply_videos" : 0,
-    "reply_images" : 0
+    "replies" : {
+      "keyword" : null,
+      "found" : 0
+    },
+    "likes" : {
+      "keyword" : null,
+      "found" : 0
+    }
   }
 }
 
@@ -80,8 +61,8 @@ function InitiateButton()
         else if($(this).html().trim()=="Replies")
         {
           window.optStats.active_tab = "replies";
-          //if($("span#replies-data").html().length==0) 
-          preparePosts();
+          if($("span#replies-data").html().length==0) 
+             preparePosts();
         }
         else if($(this).html().trim()=="Likes")
         {
@@ -111,8 +92,8 @@ function InitiateButton()
          if(window.optStats.active_tab=="tweets")
          {
            window.optStats.retweet_only = true;
-           window.optStats.stats.search.tweets.keyword = null;
-           window.optStats.stats.search.replies.keyword = null;
+           window.optStats.search_term.tweets.keyword = null;
+           window.optStats.search_term.replies.keyword = null;
            preparePosts();
            $(this).addClass("dropdown-item-checked");
          }
@@ -120,122 +101,48 @@ function InitiateButton()
     }
     if(String($(this).html()).indexOf("fa-file-image-o")!==-1)
     {
-      if(!window.optStats.retweet_only)
+      if(window.optStats.retweet_only!=true)
       {
-        if($(this).hasClass("dropdown-item-checked"))
-        {
-          if(window.optStats.active_tab=="tweets" || window.optStats.active_tab=="replies")
-          {
+      if($(this).hasClass("dropdown-item-checked"))
+       {
+         if(window.optStats.active_tab=="tweets" || window.optStats.active_tab=="replies")
+         {
             window.optStats.media_only = false;
             preparePosts();
             $(this).removeClass("dropdown-item-checked");
-          }
+         }
        }
-        else
-        {
-           if($(this).parent().parent().find(".fa-file-text-o").parent().hasClass("dropdown-item-checked") && window.optStats.text_only)
-           {
-              $(this).parent().parent().find(".fa-file-text-o").parent().removeClass("dropdown-item-checked");
-              window.optStats.text_only = false;
-            }
-            window.optStats.media_only = true;
-            preparePosts();
-            $(this).addClass("dropdown-item-checked");
-        }
-      }
-      if(window.optStats.active_tab=="tweets" && window.optStats.retweet_only)
-      {
-        if($(this).hasClass("dropdown-item-checked"))
-        {
-          window.optStats.media_only = false;
-          preparePosts();
-          $(this).removeClass("dropdown-item-checked");
-        }
-        else
-        {
-          if(window.optStats.text_only)
-          {
-            window.optStats.text_only = false;
-            if($(this).parent().parent().find(".fa-file-text-o").parent().hasClass("dropdown-item-checked"))
-              $(this).parent().parent().find(".fa-file-text-o").parent().removeClass("dropdown-item-checked");
-            window.optStats.media_only = true;
-            preparePosts();
-            $(this).addClass("dropdown-item-checked");
-          }
-          else
-          {
-            window.optStats.media_only = true;
-            preparePosts();
-            $(this).addClass("dropdown-item-checked");
-          }
-        }
+       else
+       {
+         if(window.optStats.active_tab=="tweets" || window.optStats.active_tab=="replies")
+         {
+           window.optStats.media_only = true;
+           window.optStats.search_term.tweets.keyword = null;
+           window.optStats.search_term.replies.keyword = null;
+           preparePosts();
+           $(this).addClass("dropdown-item-checked");
+         }
+       }
       }
     }
-    if(String($(this).html()).indexOf("fa-file-text-o")!==-1)
+    if(String($(this).html()).indexOf("fa-sort-alpha")!==-1)
     {
-      if(window.optStats.active_tab=="tweets")
+      if(String($(this).html()).indexOf("fa-sort-alpha-desc")!==-1)
       {
-        if($(this).parent().parent().find(".fa-file-image-o").parent().hasClass("dropdown-item-checked") && window.optStats.media_only)
-        {
-          window.optStats.media_only = false;
-          window.optStats.text_only = true;
-          preparePosts();
-          $(this).parent().parent().find(".fa-file-image-o").parent().removeClass("dropdown-item-checked");
-          $(this).addClass("dropdown-item-checked");
-        }
-        else
-        {
-          if($(this).hasClass("dropdown-item-checked"))
-          {
-            window.optStats.text_only = false;
-            preparePosts();
-            $(this).removeClass("dropdown-item-checked");
-          }
-          else
-          {
-            window.optStats.text_only = true;
-            preparePosts();
-            $(this).addClass("dropdown-item-checked");
-          }
-        }
-      }
-      else if(window.optStats.active_tab=="replies")
-      {
-        if($(this).parent().parent().find(".fa-file-image-o").parent().hasClass("dropdown-item-checked") && window.optStats.media_only)
-        {
-          window.optStats.media_only = false;
-          window.optStats.text_only = true;
-          preparePosts();
-          $(this).parent().parent().find(".fa-file-image-o").parent().removeClass("dropdown-item-checked");
-          $(this).addClass("dropdown-item-checked");
-        }
-        else
-        {
-          window.optStats.text_only = true;
-          preparePosts();
-          $(this).addClass("dropdown-item-checked");
-        }
-      }
-    }
-    if(String($(this).html()).indexOf("fa-sort-numeric")!==-1)
-    {
-      if(String($(this).html()).indexOf("fa-sort-numeric-desc")!==-1)
-      {
-         $(this).html("<i class=\"fa fa-sort-numeric-asc\"></i>Show Oldest First");
+         $(this).html("<i class=\"fa fa-sort-alpha-asc\"></i>Show Oldest First");
          window.optStats.data_order ="desc";
          preparePosts();
       }
       else 
       {
-         $(this).html("<i class=\"fa fa-sort-numeric-desc\"></i>Show Newest First");
+         $(this).html("<i class=\"fa fa-sort-alpha-desc\"></i>Show Newest First");
          window.optStats.data_order = "asc";
          preparePosts();
       }
     }
     if(String($(this).html()).indexOf("fa-refresh")!==-1)
     {
-      resetMenuState();
-      /*window.optStats.media_only = false;
+      window.optStats.media_only = false;
       if($(this).parent().parent().find(".fa-file-image-o").parent().hasClass("dropdown-item-checked"))
            $(this).parent().parent().find(".fa-file-image-o").parent().removeClass("dropdown-item-checked");
            
@@ -273,42 +180,17 @@ function InitiateButton()
         window.optStats.search_term.likes.keyword = null;
         window.optStats.data_order ="desc";
         preparePosts();
-      }*/
+      }
     }
     if(String($(this).html()).indexOf("fa-search")!==-1)
     {
-      showDialog("", "input", "Search Tweets");
+      showDialog("Search Tweets","","input");
     }
     else if(String($(this).html()).indexOf("fa-gears")!==-1)
     {
-      showDialog($(".tabular").html(), "settings", "Settings");
+      showDialog("Settings", $(".tabular").html(), "settings");
     }
   });
-}
-
-function resetMenuState(reload=false)
-{
-  window.optStats.data_order = "desc";
-  window.optStats.retweet_only = false;
-  window.optStats.media_only = false;
-  window.optStats.text_only = false;
-  window.optStats.stats.search.tweets.keyword = null;
-  window.optStats.stats.search.tweets.found = 0;
-  window.optStats.stats.search.tweets.active = false;
-  window.optStats.stats.search.replies.keyword = null;
-  window.optStats.stats.search.replies.found = 0;
-  window.optStats.stats.search.replies.active = false;
-  window.optStats.stats.search.likes.keyword = null;
-  window.optStats.stats.search.likes.found = 0;
-  window.optStats.stats.search.likes.active = false;
-  window.optStats.search_mode = false;
-  if($(".dropdown-menu a").parent().parent().find(".fa-retweet").parent().hasClass("dropdown-item-checked"))
-     $(".dropdown-menu a").parent().parent().find(".fa-retweet").parent().removeClass("dropdown-item-checked");
-  if($(".dropdown-menu a").parent().parent().find(".fa-file-image-o").parent().hasClass("dropdown-item-checked"))
-     $(".dropdown-menu a").parent().parent().find(".fa-file-image-o").parent().removeClass("dropdown-item-checked");
-  if($(".dropdown-menu a").parent().parent().find(".fa-file-text-o").parent().hasClass("dropdown-item-checked"))
-     $(".dropdown-menu a").parent().parent().find(".fa-file-text-o").parent().removeClass("dropdown-item-checked");
-  if(reload) preparePosts();
 }
 
 function startLoader()
@@ -322,7 +204,7 @@ function startLoader()
   }
 }
 
-function FileExists(url, variable=null, callback=null, idx=-1, loop=0)
+function FileExists(url, variable=null, callback=null, idx=-1)
 {
   fileType = url.toLowerCase().split(".");
   imgType = ["jpg","jpeg","png","gif","webp"];
@@ -365,7 +247,17 @@ function FileExists(url, variable=null, callback=null, idx=-1, loop=0)
     vdoFile.addEventListener("loadeddata", () => {
       if(document.body.removeChild(vdoFile))
       {
-         callback(true, variable, url, idx, loop);
+        if(variable!==null)
+        {
+          if(idx>-1)
+            callback(true, variable, url, idx);
+          else callback(true, variable, url);
+        }
+        else
+        {
+          if(idx>-1) callback(true, null, url, idx);
+          else callback(true, variable, url);
+        }
       }
     });
   }
@@ -412,25 +304,9 @@ function unloadJS(FILE_URL)
   }
 }
 
-function showDialog(message="", type='dialog', title="Information")
+function showDialog(title="Information", message="", type='dialog')
 {
-  if(type=='dialog')
-  {
-    $("<div id=\"dialog-box\" title=\""+title+"\"><p>"+message+"</p></div>").dialog({
-          modal: true,
-          buttons: {
-            btnCancel : {
-              click : function() {
-               $(this).dialog("close");
-              },
-              text: "Close",
-              class: 'btn-dialog'
-            }
-          }
-          /*height: 490,
-          width: 350*/
-    });
-  }
+  if(type=='dialog') text = message;
   else if(type=='input')
   {
     text = "<div class=\"form-group\"><label for=\"inputSearch\">Search :</label><input type=\"text\" class=\"form-control is-valid\" id=\"inputSearch\" aria-describedby=\"clueHelp\" placeholder=\"Keyword...\"></div>";
@@ -447,27 +323,17 @@ function showDialog(message="", type='dialog', title="Information")
         btnSearch : {
           click : function() {
             if(window.optStats.active_tab=="tweets" && $(this).find("input").val().length>0)
-            {
-              window.optStats.stats.search.tweets.keyword = $(this).find("input").val();
-              window.optStats.stats.search.tweets.active = true;
-            }
+             window.optStats.search_term.tweets.keyword = $(this).find("input").val();
             if(window.optStats.active_tab=="replies" && $(this).find("input").val().length>0)
-            {
-              window.optStats.stats.search.replies.keyword = $(this).find("input").val();
-              window.optStats.stats.replies.active = true;
-            }
+             window.optStats.search_term.replies.keyword = $(this).find("input").val();
             if(window.optStats.active_tab=="likes" && $(this).find("input").val().length>0)
-            {
-              window.optStats.stats.search.likes.keyword = $(this).find("input").val();
-              window.optStats.stats.likes.active = true;
-            }
-            if($(this).find("input").val().length>0)
-            {
-               window.optStats.search_mode = true;
+             window.optStats.search_term.likes.keyword = $(this).find("input").val();
+             if($(this).find("input").val().length>0)
+             {
                $(this).dialog( "close" );
                preparePosts();
-            }
-            else $(this).find("input").focus();
+             }
+             else $(this).find("input").focus();
           },
           text: "Search",
           class: 'btn-dialog'
@@ -481,15 +347,15 @@ function showDialog(message="", type='dialog', title="Information")
      id = $(this).attr('id');
      txt = $(this).text();
      if(id=="total-records")
-       temp = message.replace($(this).parent().html(), "Total records (<i>tweets.js</i>) : <span id=\"total-records\">"+window.optStats.stats.total_data+" records</span>");
+       temp = message.replace($(this).parent().html(), "Total records (<i>tweets.js</i>) : <span id=\"total-records\">"+window.optStats.total_tweets+" records</span>");
      if(id=="total-posts")
-      temp = temp.replace($(this).parent().html(), "Total tweet posts : <span id=\"total-posts\">"+window.optStats.stats.total_post+" records</span>");
+      temp = temp.replace($(this).parent().html(), "Total tweet posts : <span id=\"total-posts\">"+window.optStats.tweet_count+" records</span>");
      if(id=="total-retweets")
-       temp = temp.replace($(this).parent().html(), "Total retweets : <span id=\"total-retweets\">"+window.optStats.stats.total_retweet+" records</span>");
+       temp = temp.replace($(this).parent().html(), "Total retweets : <span id=\"total-retweets\">"+window.optStats.retweet_count+" records</span>");
     if(id=="total-replies")
-       temp = temp.replace($(this).parent().html(), "Total replies : <span id=\"total-replies\">"+window.optStats.stats.total_replies+" records</span>");
+       temp = temp.replace($(this).parent().html(), "Total replies : <span id=\"total-replies\">"+window.optStats.reply_count+" records</span>");
     if(id=="total-likes")
-       temp = temp.replace($(this).parent().html(), "Total likes (<i>like.js</i>) : <span id=\"total-likes\">"+window.optStats.stats.total_likes+" records</span>");
+       temp = temp.replace($(this).parent().html(), "Total likes (<i>like.js</i>) : <span id=\"total-likes\">"+window.optStats.like_count+" records</span>");
    });
    $(" "+temp).children().each(function(){
      $($(this).html()).find('input').each(function() {
@@ -554,11 +420,7 @@ function showDialog(message="", type='dialog', title="Information")
                         $(this).find('input[id="data-folder"]').focus();
                         return;
                       }
-                      else
-                      {
-                        //preparePosts(1, true);
-                        resetMenuState();
-                      }
+                      else preparePosts(1, true);
                     })
                   }
                 });
@@ -583,11 +445,7 @@ function showDialog(message="", type='dialog', title="Information")
                         $(this).find('input[id="data-folder"]').focus();
                         return;
                       }
-                      else
-                      {
-                        //preparePosts(1, true);
-                        resetMenuState();
-                      }
+                      else preparePosts(1, true);
                     });
                   }
                 });
@@ -605,50 +463,6 @@ function showDialog(message="", type='dialog', title="Information")
       width: 350
     }).tabs();
   }
-  else if(type=='source')
-  {
-    $("<div id=\"dialog-box\" title=\"HTML Source\"><p><textarea style=\"width:310px;height:350px\">"+message+"</textarea></p></div>").dialog({
-          modal: true,
-          buttons: {
-            btnCancel : {
-              click : function() {
-               $(this).dialog("close");
-              },
-              text: "Close",
-              class: 'btn-dialog'
-            }
-          },
-          height: 490,
-          width: 350
-    });
-  }
-  else alert("😣 Unknown dialog type !!!")
-}
-
-function setMenu(obj)
-{
-  if(typeof($(obj).parent().attr('screenName'))!=='undefined')
-          {
-             window.open("https://twitter.com/"+$(obj).parent().attr('screenName')+"/status/"+$(obj).attr("id").substring(0, $(obj).attr("id").length));
-          }
-  else showDialog("Twitter Post ID : "+$(obj).parent().attr("id").substring(0, $(obj).parent().attr("id").length-1))
-}
-
-String.prototype.replace1st = function (pattern, replacement)
-{
-  return this.substring(0, this.indexOf(pattern))+replacement+this.substring(this.indexOf(pattern)+pattern.length, this.length);
-}
-
-// Listen for orientation changes
-window.addEventListener("orientationchange", function() {
-  // Announce the new orientation number
-  window.optStats.orientation = window.orientation;
-}, false);
-
-function isMobile()
-{
-  const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-  return regex.test(navigator.userAgent);
 }
 
 function setPagination(current=1)
@@ -656,73 +470,41 @@ function setPagination(current=1)
    template = "<nav><ul class=\"pagination\">";
    scrolls = "";
    records = 0;
-   if(window.optStats.active_tab=="tweets")
+   if((window.optStats.active_tab=="tweets") && !window.optStats.retweet_only && window.optStats.search_term.tweets.keyword==null)
+      records = window.optStats.tweet_count+window.optStats.retweet_count;
+   if((window.optStats.active_tab=="tweets") && window.optStats.retweet_only && window.optStats.search_term.tweets.keyword==null)
+      records = window.optStats.retweet_count;
+   if(window.optStats.active_tab=="replies" && window.optStats.search_term.replies.keyword==null)
+      records = window.optStats.reply_count;
+   if(window.optStats.active_tab=="likes" && window.optStats.search_term.likes.keyword==null)
+      records = window.optStats.like_count;
+   if(window.optStats.search_term.tweets.keyword!=null || window.optStats.search_term.replies.keyword!=null || window.optStats.search_term.likes.keyword!=null)
    {
-     //Normal
-     if(!window.optStats.retweet_only && !window.optStats.media_only)
+     if(window.optStats.active_tab=="tweets")
      {
-       if(window.optStats.text_only)
-       {
-         if(window.optStats.search_mode && window.optStats.stats.search.tweets.active)
-            records = window.optStats.stats.search.tweets.found;
-         else
-            records = window.optStats.stats.post_text+window.optStats.stats.retweet_text;
-       }
-       else
-       {
-         if(window.optStats.search_mode  && window.optStats.stats.search.tweets.active)
-         {
-            records = window.optStats.stats.search.tweets.found;
-         }
-         else
-           records = window.optStats.stats.total_post+window.optStats.stats.total_retweet;
-       }
+       if(window.optStats.search_term.tweets.keyword==null)
+         records = window.optStats.tweet_count+window.optStats.retweet_count;
+       else records = window.optStats.search_term.tweets.found;
      }
-     else
+     else if(window.optStats.active_tab=="replies")
      {
-       if(window.optStats.media_only)
-       {
-         if(window.optStats.retweet_only) records = window.optStats.stats.retweet_with_media
-         else records = window.optStats.stats.post_with_media+window.optStats.stats.retweet_with_media;
-       }
-       else
-       {
-         if(window.optStats.retweet_only)
-         {
-           if(window.optStats.text_only)
-             records = window.optStats.stats.retweet_text;
-           else
-             records = window.optStats.stats.total_retweet;
-         }
-       }
+       if(window.optStats.search_term.replies.keyword==null)
+         records = window.optStats.reply_count;
+       else records = window.optStats.search_term.replies.found;
+     }
+     else if(window.optStats.active_tab=="likes" && window.optStats.search_term.likes.keyword!==null)
+     {
+       records = window.optStats.search_term.likes.found;
      }
    }
-   else if(window.optStats.active_tab=="replies")
+   if(window.optStats.media_only==true && window.optStats.active_tab!='likes')
    {
-     if(window.optStats.media_only)
-     {
-       records = window.optStats.stats.reply_with_media;
-     }
-     else
-     {
-       if(window.optStats.text_only)
-       {
-         records = window.optStats.stats.reply_text;
-       }
-       else
-       {
-         records = window.optStats.stats.total_replies;
-       }
-     }
+     records = window.optStats.filtered_count;
    }
-   else if(window.optStats.active_tab=="likes")
-   {
-     records = window.optStats.stats.total_likes;
-   }
-   //alert("Records : "+records)
    if(typeof(records)!=='undefined')
    {
      loop = Math.ceil(records/window.optStats.displayPerPage);
+     //alert(records+" > "+loop+" pages");
      if(loop>5)
      {
         for(c=0; c<loop; c++)
@@ -770,6 +552,31 @@ function setPagination(current=1)
    }
 }
 
+function setMenu(obj)
+{
+  if(typeof($(obj).parent().attr('screenName'))!=='undefined')
+          {
+             window.open("https://twitter.com/"+$(obj).parent().attr('screenName')+"/status/"+$(obj).attr("id").substring(0, $(obj).attr("id").length));
+          }
+}
+
+String.prototype.replace1st = function (pattern, replacement)
+{
+  return this.substring(0, this.indexOf(pattern))+replacement+this.substring(this.indexOf(pattern)+pattern.length, this.length);
+}
+
+// Listen for orientation changes
+window.addEventListener("orientationchange", function() {
+  // Announce the new orientation number
+  window.optStats.orientation = window.orientation;
+}, false);
+
+function isMobile()
+{
+  const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+  return regex.test(navigator.userAgent);
+}
+
 function updateHashtagUser(txt, d)
 {
   if(txt.length>0)
@@ -798,19 +605,19 @@ function updateHashtagUser(txt, d)
              return words.replace(words, "<a target=\"_blank\" href=\"https://twitter.com/"+words.substring(1, words.length)+"\">"+words+"</a>");
            }
          }
-         if(window.optStats.active_tab=="tweets" && window.optStats.stats.search.tweets.keyword!=null && words.toLowerCase().includes(window.optStats.stats.search.tweets.keyword.toLowerCase()))
+         if(window.optStats.active_tab=="tweets" && window.optStats.search_term.tweets.keyword!=null && words.toLowerCase().includes(window.optStats.search_term.tweets.keyword.toLowerCase()))
          {
-           rep = new RegExp(window.optStats.stats.search.tweets.keyword, 'gi');
-           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.stats.search.tweets.keyword+"</i></b>");
-         } else if(window.optStats.active_tab=="replies" && window.optStats.stats.search.replies.keyword!=null && words.toLowerCase().includes(window.optStats.stats.search.replies.keyword.toLowerCase()))
+           rep = new RegExp(window.optStats.search_term.tweets.keyword, 'gi');
+           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.search_term.tweets.keyword+"</i></b>");
+         } else if(window.optStats.active_tab=="replies" && window.optStats.search_term.replies.keyword!=null && words.toLowerCase().includes(window.optStats.search_term.replies.keyword.toLowerCase()))
          {
-           rep = new RegExp(window.optStats.stats.search.replies.keyword, 'gi');
-           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.stats.search.replies.keyword+"</i></b>");
+           rep = new RegExp(window.optStats.search_term.replies.keyword, 'gi');
+           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.search_term.replies.keyword+"</i></b>");
          }
-         else if(window.optStats.active_tab=="likes" && window.optStats.stats.search.likes.keyword!=null && words.toLowerCase().includes(window.optStats.stats.search.likes.keyword.toLowerCase()))
+         else if(window.optStats.active_tab=="likes" && window.optStats.search_term.likes.keyword!=null && words.toLowerCase().includes(window.optStats.search_term.likes.keyword.toLowerCase()))
          {
-           rep = new RegExp(window.optStats.stats.search.likes.keyword, 'gi');
-           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.stats.search.likes.keyword+"</i></b>");
+           rep = new RegExp(window.optStats.search_term.likes.keyword, 'gi');
+           return words.replace(rep, "<b><i style=\"color: "+window.optStats.keywordHilite+"\">"+window.optStats.search_term.likes.keyword+"</i></b>");
          }
          else return words;
       } else return words;
@@ -848,15 +655,6 @@ function updateMedia(txt, d, index=-1)
         if(d.tweet.extended_entities.media[z].type=="video" || d.tweet.extended_entities.media[z].type=="animated_gif")
         {
           refresh++;
-          if(z==0)
-          {
-            if(d.tweet.extended_entities.media.length>1 && d.tweet.extended_entities.media.length==2)
-              iTxt = "<div class=\"double_img-prev\">"
-            if(d.tweet.extended_entities.media.length>1 && d.tweet.extended_entities.media.length==3)
-              iTxt = "<div class=\"triple_img-prev\">";
-            if(d.tweet.extended_entities.media.length>1 && d.tweet.extended_entities.media.length==4)
-              iTxt = "<div class=\"forth_img-prev\">"
-          }
           for(var s=0; s<d.tweet.extended_entities.media[z].video_info.variants.length; s++)
           {
             ext = d.tweet.extended_entities.media[z].video_info.variants[s].content_type.split("\/");
@@ -865,123 +663,65 @@ function updateMedia(txt, d, index=-1)
 
            if(vdoFname.trim().length>0)
            {
-             FileExists(vdoFname, d.tweet, function(stat, va, file, idx, lastIdx) {
+             FileExists(vdoFname, d.tweet, function(stat, va, file, idx) {
                orient = !navigator.maxTouchPoints ? 'desktop' : !window.screen.orientation.angle ? 'portrait' : 'landscape';
-
-              altmsg = ""; 
-              if(stat) 
+               
+              if(Boolean(stat)==true) 
               {
-                vh = va.extended_entities.media[lastIdx].sizes.small.h;
-                vw = va.extended_entities.media[lastIdx].sizes.small.w;
+                vh = va.extended_entities.media[0].sizes.small.h;
+                vw = va.extended_entities.media[0].sizes.small.w;
                 if(vw>vh)
                   vdoTypeClass = "-horizontal";
                 else if(vh==vw)
                   vdoTypeClass = "-equal"
                 else if(vh>vw)
                   vdoTypeClass = "-vertical";
-                
-                if(va.extended_entities.media.length==2)
+                if(typeof(window.optStats.temp)!='undefined')
                 {
-                   if(lastIdx==0) vdoTypeClass += altmsg = "_double_1st";
-                   if(lastIdx==1) vdoTypeClass += altmsg = "_double_2nd"
+                  if(va.extended_entities.media.length==2)
+                   vdoTypeClass += "_double";
+                   else if(va.extended_entities.media.length==3)
+                   vdoTypeClass += "_triple";
+                   else if(va.extended_entities.media.length==4)
+                   vdoTypeClass = "_forth";
                 }
-                if(va.extended_entities.media.length==3)
-                {
-                  if(lastIdx==0)
-                   vdoTypeClass += altmsg = "_triple_1st";
-                  if(lastIdx==1) vdoTypeClass += altmsg = "_triple_2nd";
-                  if(lastIdx==2) vdoTypeClass += altmsg = "_triple_3rd";
-                }
-                if(va.extended_entities.media.length==4)
-                {
-                   if(lastIdx==0) 
-                     vdoTypeClass += altmsg = "_forth_1st";
-                   if(lastIdx==1) 
-                     vdoTypeClass += altmsg = "_forth_2nd";
-                   if(lastIdx==2)
-                     vdoTypeClass += altmsg = "_forth_3rd";
-                   if(lastIdx==3)
-                     vdoTypeClass += altmsg = "_forth_4th";
-                }
-               
                 if(va.extended_entities.media.length>1)
                 {
                   if(va.extended_entities.media.length==2)
-                    className = "double_img-prev_with-vdo";
+                  className = "double_img-prev_with-vdo";
                   else if(va.extended_entities.media.length==3)
-                    className = "triple_img-prev_with-vdo";
+                  className = "triple_img-prev_with-vdo";
                   else if(va.extended_entities.media.length==4)
-                    className = "forth_img-prev_with-vdo";
-                  vdo = "<video class=\"vdo_tag"+vdoTypeClass+"\" "+((va.extended_entities.media[lastIdx].type=="animated_gif")?" type=\"gif\" previewable=\"true\" autoplay loop muted":"type=\"mp4\" controls")+"><source src=\""+file+"\">Your browser does not support video</video>";
+                  className = "forth_img-prev_with-vdo";
+                  vdo = "<video class=\"vdo_tag"+vdoTypeClass+"\" controls><source src=\""+file+"\">Your browser does not support video</video>";
                 }
                 else
-                {
-                  if(va.extended_entities.media.length==1)
-                    className = "single_img-prev";
-                  vdo = "<video class=\"vdo_tag"+vdoTypeClass+"\" "+((va.extended_entities.media[lastIdx].type=="animated_gif")?" type=\"gif\" autoplay loop muted":"type=\"mp4\" controls")+"><source src=\""+file+"\">Your browser does not support video</video>";
-               }
-               if(va.extended_entities.media[lastIdx].type=="animated_gif")
-               {
-                 if(va.extended_entities.media.length==1)
-                   vdo += "<div class=\"alt-gif\">GIF</div>";
-                 if(va.extended_entities.media.length==2)
-                   vdo += "<div class=\"alt-gif"+((lastIdx==1)?"_double-2nd":"_double-1st")+"\">GIF</div>";
-                 if(va.extended_entities.media.length==3)
-                   vdo += "<div class=\"alt-gif"+((lastIdx==1)?"_triple-2nd":((lastIdx==2)?"_triple-3rd":"_triple-1st"))+"\">GIF</div>";
-                 if(va.extended_entities.media.length==4)
-                   vdo += "<div class=\"alt-gif"+((lastIdx==1)?"_forth-2nd":((lastIdx==2)?"_forth-3rd":((lastIdx==3)?"_forth-4th":"_forth-1st")))+"\">GIF</div>";
-                 
-                 if(window.optStats.enable_imgalt==true && typeof(window.YTD.imgalt.part0)!='undefined' && window.YTD.imgalt.part0.length>0 && window.YTD.imgalt.part0.filter(a=>a.tweet.id==va.id).length>0)
-                 {
-                   desc = window.YTD.imgalt.part0.filter(a => a.tweet.id == va.id)[0].tweet.description[lastIdx].full_text;
-                   if(desc != 'undefined')
-                   {
-                     urlRegex = /(https?:\/\/[^\s]+)/g;
-                     if(desc.match(urlRegex)!==null)
-                       {
-                         t = desc.match(urlRegex);
-                         if(t.length>0)
-                         {
-                         t.forEach(e => {
-                           desc = desc.replace(e, "<a target=\"_blank\" class=\"default-link\" href=\""+e+"\">"+e.substring(0,40)+((e.length>40)?"...":"")+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
-                           });
-                         }
-                       }
-                    style = altmsg.replaceAll("\_", "-")+"_with-vdo";
-                     vdo += "<div index=\""+lastIdx+"\" class=\"alt-gif"+style+"\">ALT<span id=\"alt-txt\">"+desc+"</span></div>";
-                   }
-                 }
-               }
+                 vdo = "<video class=\"vdo_tag"+vdoTypeClass+"\" controls><source src=\""+file+"\">Your browser does not support video</video>";
 
-                  if(va.extended_entities.media.length>1)
+                if(window.optStats.active_tab=="tweets")
+                {
+                  if(typeof(window.optStats.temp)!='undefined')
                   {
-                    if(window.optStats.active_tab=="tweets")
-                    {
-                      $(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, window.optStats.cache.filter(e=>e.id==va.id)[0].content.replace("<!--template-->", vdo)));
-                      
-                    }
-                    else if(window.optStats.active_tab=="replies")
-                    {
-                       $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, window.optStats.cache.filter(e=>e.id==va.id)[0].content.replace("<!--template-->", vdo)));
-                       //if(va.id=="1605453482445737984") alert($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html())
-                      //alert("Before : "+window.optStats.cache.length)
-                      window.optStats.cache = window.optStats.cache.filter(e=>e.id!=va.id);
-                      //alert("After : "+window.optStats.cache.length)
-                    }
+                    $(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[0].url, "<div class=\""+className+"\">"+vdo+window.optStats.temp));
+                    delete window.optStats.temp;
                     setImgPrev();
                   }
                   else
+                  $(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[0].url, "<br/>"+vdo));
+                }
+                else if(window.optStats.active_tab=="replies")
+                {
+                  if(typeof(window.optStats.temp)!='undefined')
                   {
-                    if(window.optStats.active_tab=="tweets")
-                    {
-                      $(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-tweets #tweets-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, vdo));
-
-                    }
-                    else if(window.optStats.active_tab=="replies")
-                     $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, vdo));
+                    $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[0].url, "<div class=\""+className+"\">"+vdo+window.optStats.temp));
+                    delete window.optStats.temp;
+                    setImgPrev();
                   }
+                  else 
+                  $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[0].url, "<br/>"+vdo));
+                }
              }
-            }, index, z);
+            }, index);
           }
          }
         }
@@ -991,42 +731,36 @@ function updateMedia(txt, d, index=-1)
           {
             imgFname = window.optStats.data_folder+d.tweet.id+"-"+d.tweet.extended_entities.media[z].media_url.substring(d.tweet.extended_entities.media[z].media_url.lastIndexOf("\/")+1);
 
-          if(window.optStats.enable_imgalt==true && typeof(window.YTD.imgalt.part0)!='undefined' && window.YTD.imgalt.part0.length>0)
-          {
+            if(window.optStats.enable_imgalt==true && typeof(window.YTD.imgalt.part0)!='undefined' && window.YTD.imgalt.part0.length>0)
+            {
             window.YTD.imgalt.part0.filter(e => e.tweet.id == d.tweet.id).forEach(r => {
                if(d.tweet.extended_entities.media.length==1) mode = "";
-               wvid = "";
-               if(d.tweet.extended_entities.media.filter(e=>e.type=="video" || e.type=="animated_gif").length>0)
-               wvid = "_with-vdo";
-               if(d.tweet.extended_entities.media.length==2) mode = "-double-"+((z==0)?"1st"+wvid:"2nd"+wvid);
-               if(d.tweet.extended_entities.media.length==3) mode = "-triple-"+((z==0)?"1st"+wvid:((z==1)?"2nd"+wvid:"3rd"+wvid));
-               if(d.tweet.extended_entities.media.length==4) mode = "-forth-"+((z==0)?"1st"+wvid:((z==1)?"2nd"+wvid:((z==2)?"3rd"+wvid:"4th"+wvid)));
-
-                 for(k=0; k<r.tweet.description.length; k++)
-                 {
-                    if(d.tweet.extended_entities.media[z].media_url.substring(d.tweet.extended_entities.media[z].media_url.lastIndexOf("\/")+1) === r.tweet.description[k].media_url.substring(r.tweet.description[k].media_url.lastIndexOf("\/")+1))
+               if(d.tweet.extended_entities.media.length==2) mode = "-double-"+((z==0)?"1st":"2nd");
+               if(d.tweet.extended_entities.media.length==3) mode = "-triple-"+((z==0)?"1st":((z==1)?"2nd":"3rd"));
+               if(d.tweet.extended_entities.media.length==4) mode = "-forth-"+((z==0)?"1st":((z==1)?"2nd":((z==2)?"3rd":"4th")));
+                for(k=0; k<r.tweet.description.length; k++)
+                {
+                  if(d.tweet.extended_entities.media[z].media_url.substring(d.tweet.extended_entities.media[z].media_url.lastIndexOf("\/")+1) === r.tweet.description[k].media_url.substring(r.tweet.description[k].media_url.lastIndexOf("\/")+1))
+                  {
+                  urlRegex = /(https?:\/\/[^\s]+)/g;
+                  temps = r.tweet.description[k].full_text;
+                  if(temps.match(urlRegex)!==null)
+                  {
+                    t = temps.match(urlRegex);
+                    if(t.length>0)
                     {
-                       urlRegex = /(https?:\/\/[^\s]+)/g;
-                       temps = r.tweet.description[k].full_text;
-                       if(temps.match(urlRegex)!==null)
-                       {
-                         t = temps.match(urlRegex);
-                         if(t.length>0)
-                         {
-                         t.forEach(e => {
-                           temps = temps.replace(e, "<a target=\"_blank\" class=\"default-link\" href=\""+e+"\">"+e.substring(0,40)+((e.length>40)?"...":"")+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
-                           });
-                         }
-                       }
-
-                       if(typeof(r.tweet.description[k].index)!='undefined' && z == r.tweet.description[k].index)
-                      desc[r.tweet.description[k].index] = "<div index=\""+r.tweet.description[k].index+"\" class=\"alt-left"+mode+"\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
-                    
-                    if(typeof(r.tweet.description[k].index)=='undefined')
-                       desc[desc.length] = "<div class=\"alt-left\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
-
+                      t.forEach(e => {
+                        temps = temps.replace(e, "<a target=\"_blank\" class=\"default-link\" href=\""+e+"\">"+e.substring(0,40)+((e.length>40)?"...":"")+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
+                     });
+                    }
                   }
-                 }
+
+                  if(typeof(r.tweet.description[k].index)!='undefined' && z == r.tweet.description[k].index)
+                  desc[r.tweet.description[k].index] = "<div index=\""+r.tweet.description[k].index+"\" class=\"alt-left"+mode+"\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
+                if(typeof(r.tweet.description[k].index)=='undefined')
+                  desc[desc.length] = "<div class=\"alt-left\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
+                  }
+                }
               });
             }
 
@@ -1036,7 +770,7 @@ function updateMedia(txt, d, index=-1)
            }
            else if(d.tweet.extended_entities.media.length==2)
            {
-             if(d.tweet.extended_entities.media.filter(e=>e.type=="video" || e.type=="animated_gif").length>0)
+             if(d.tweet.extended_entities.media.filter(e=>e.type=="video").length>0)
                idName = "_with-vdo";
               if(z==0)
                 iTxt += "<div class=\"double_img-prev\"><img class=\"img-prev_double-1st"+(typeof(idName)!='undefined'?idName:"")+"\" src=\""+imgFname+"\"/>";
@@ -1045,7 +779,7 @@ function updateMedia(txt, d, index=-1)
            }
            else if(d.tweet.extended_entities.media.length==3)
           {
-            if(d.tweet.extended_entities.media.filter(e=>e.type=="video" || e.type=="animated_gif").length>0)
+            if(d.tweet.extended_entities.media.filter(e=>e.type=="video").length>0)
                idName = "_with-vdo";
             if(z==0)
               iTxt += "<div class=\"triple_img-prev\"><img class=\"img-prev_triple-1st"+(typeof(idName)!='undefined'?idName:"")+"\" src=\""+imgFname+"\"/>";
@@ -1056,7 +790,7 @@ function updateMedia(txt, d, index=-1)
           }
           else if(d.tweet.extended_entities.media.length==4)
           {
-            if(d.tweet.extended_entities.media.filter(e=>e.type=="video" || e.type=="animated_gif").length>0)
+            if(d.tweet.extended_entities.media.filter(e=>e.type=="video").length>0)
                idName = "_with-vdo";
             if(z==0)
               iTxt += "<div class=\"forth_img-prev\"><img class=\"img-prev_forth-1st"+(typeof(idName)!='undefined'?idName:"")+"\" src=\""+imgFname+"\"/>";
@@ -1068,22 +802,25 @@ function updateMedia(txt, d, index=-1)
               iTxt += "<img class=\"img-prev_forth-4th"+(typeof(idName)!='undefined'?idName:"")+"\" src=\""+imgFname+"\"/>";
           }
         }
-        }
+     }
   }
   if(typeof(iTxt)!='undefined' && iTxt.length>0)
   {
-      if(typeof(idName)=='undefined')
+      if(d.tweet.extended_entities.media[0].type=="photo")
       {
         txt = txt.replace(d.tweet.entities.media[0].url, iTxt+desc.join("")+((d.tweet.extended_entities.media.length>2)?"<div class=\"clearfix\"></div></div>":"</div>")).replace(/(\r\n|\r|\n)/g, "<br/>");
+
+           delete iTxt;
+           delete desc;
+           delete idName;
       }
       else
       {
-        if(window.optStats.cache.filter(e=>e.id==d.tweet.id).length==0)
-          window.optStats.cache.push({ "id" : d.tweet.id, "content" : iTxt+"<!--template-->"+desc.join("").replace(/(\r\n|\r|\n)/g, "<br/>")+((d.tweet.extended_entities.media.length>2)?"<div class=\"clearfix\"></div></div>":"</div>") });;
+        window.optStats.temp = iTxt;
+        delete iTxt;
+        delete desc;
+        delete idName;
       }
-      delete iTxt;
-      delete desc;
-      delete idName;
     }
   }
   return txt;
@@ -1116,15 +853,6 @@ function setImgPrev()
   });
   $(".image-viewer").on("click", function(){
      $(".image-viewer").css("visibility", "hidden");
-     if($(this).html().indexOf("<video")>-1)
-     {
-       $(this).html("<img src=\"\"/>");
-     }
-     else
-     {
-       $(this).css('background-image', '');
-       $(this).css("background-color", "#0f0f0e")
-     }
   });
   $(".double_img-prev img").click(function() {
      $(".image-viewer").css("background-image", "url("+$(this).attr("src")+")");
@@ -1165,108 +893,24 @@ function setImgPrev()
         $('.imgdesc').show().css( {'visibility': 'visible', 'height' : '380px', 'opacity': 0.3 } ).animate( { 'opacity': '1'}, 800 );
     }
   });
-  $("div[class|=alt-gif]").on("click", function() {
-    txt = $($(this).html().replace("ALT", "")).html();
-    $('.imgdesc .imgdescription').html(txt);
-    if(isMobile())
-    {
-      $('.imgdesc').show().css( {'visibility': 'visible', 'opacity': 0, 'bottom': '-100px' } ).animate( { 'opacity': '1', 'bottom' : 0 }, 800 );
-    }
-    else
-    {
-      if(window.optStats.orientation==0)
-        $('.imgdesc').show().css( {'visibility': 'visible', 'height' : '600px', 'opacity': 0.3 } ).animate( { 'opacity': '1'}, 800 );
-      else if(window.optStats.orientation==90)
-        $('.imgdesc').show().css( {'visibility': 'visible', 'height' : '380px', 'opacity': 0.3 } ).animate( { 'opacity': '1'}, 800 );
-    }
-  });
   $(".btnplate button").click(function(){
     $(".imgdesc").css("visibility", "hidden");
   });
-  $("video[class^=vdo_tag]").click(function(){
-    if($(this).attr("type")=="gif" && Boolean($(this).attr("previewable"))==true)
-    {
-      //Math.ceil($('html').css('max-width')/)
-      $(".image-viewer").css("background-color", '#0f0f0e');
-      $(".image-viewer").html("<video autoplay loop muted width=\"100%\" style=\"margin:0 auto;position:absolute;top:50%;left:50%;-ms-transform: translate(-50%, -50%);transform: translate(-50%, -50%);\">"+$(this).html()+"</video>");
-      $(".image-viewer").css("visibility", "visible");
-    }
-  })
-}
-
-function NumFormat(nStr)
-{
-    nStr += '';
-    var x = nStr.split('.');
-    var x1 = x[0];
-    var x2 = x.length > 1 ? '.' + x[1] : '';
-    if(x[0].length>4) return x[0]/1000 + "K";
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-    }
-    return x1 + x2;
-}
-
-function grabDBinfo()
-{
-  if(window.optStats.stats.total_data==0)
-     window.optStats.stats.total_data = window.YTD.tweets.part0.length;
-  
-  if(window.optStats.stats.total_post==0)
-     window.optStats.stats.total_post = window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)!=="RT @" && e.tweet.full_text.substring(0,1)!=="@").length;
-  
-  if(window.optStats.stats.total_retweet==0)
-     window.optStats.stats.total_retweet = window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)=="RT @").length;
-  
-  if(window.optStats.stats.total_replies==0)
-     window.optStats.stats.total_replies = window.YTD.tweets.part0.filter(e => typeof(e.tweet.in_reply_to_user_id)!=='undefined' && e.tweet.full_text.substring(0,1)=="@").length;
-  
-  if(window.optStats.stats.post_with_media==0)
-     window.optStats.stats.post_with_media = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,2)!="RT" && e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)!='undefined').length;
-  
-  if(window.optStats.stats.post_text==0)
-     window.optStats.stats.post_text = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,2)!="RT" && e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)=='undefined').length;
-  
-  if(window.optStats.stats.retweet_with_media==0)
-     window.optStats.stats.retweet_with_media = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)=='undefined').length;
-  
-  if(window.optStats.stats.retweet_text==0)
-     window.optStats.stats.retweet_text = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)!=='undefined').length;
-  
-  if(window.optStats.stats.reply_with_media==0)
-     window.optStats.stats.reply_with_media = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,1)=="@" && typeof(e.tweet.extended_entities)!='undefined').length;
-  
-  if(window.optStats.stats.reply_text==0)
-    window.optStats.stats.reply_text = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,1)=="@" && typeof(e.tweet.extended_entities)=='undefined').length;
-    
-  if(window.optStats.stats.post_videos==0)
-    window.optStats.stats.post_videos = window.YTD.tweets.part0.filter(e=> e.tweet.full_text.substring(0,1)!="@" && e.tweet.full_text.substring(0,2)!="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length>0).length;
-     
-  if(window.optStats.stats.post_images==0)
-    window.optStats.stats.post_images = window.YTD.tweets.part0.filter(e=> e.tweet.full_text.substring(0,1)!="@" && e.tweet.full_text.substring(0,2)!="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length==0).length;
-    
-  if(window.optStats.stats.reply_videos==0)
-    window.optStats.stats.reply_videos = window.YTD.tweets.part0.filter(e=> e.tweet.full_text.substring(0,1)=="@" && e.tweet.full_text.substring(0,2)!="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length>0).length;
-     
-  if(window.optStats.stats.reply_images==0)
-    window.optStats.stats.reply_images = window.YTD.tweets.part0.filter(e=> e.tweet.full_text.substring(0,1)=="@" && e.tweet.full_text.substring(0,2)!="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length==0).length;
-    
-  if(window.optStats.stats.retweet_videos==0)
-     window.optStats.stats.retweet_videos = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,2)=="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length>0).length;
-     
-  if(window.optStats.stats.retweet_images==0)
-     window.optStats.stats.retweet_images = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,2)=="RT" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length==0).length;
-     
-  //alert("Jumlah post video : "+window.optStats.stats.post_videos+"\nJumlah post images : "+window.optStats.stats.post_images+"\nJumlah reply video : "+window.optStats.stats.reply_videos+"\nJumlah reply images : "+window.optStats.stats.reply_images+"\nJumlah retweet video : "+window.optStats.stats.retweet_videos+"\nJumlah retweet images : "+window.optStats.stats.retweet_images)
 }
 
 function preparePosts(page=1, refresh=false)
 {
-  //Refresh is a total reset on all filters
   if(Boolean(refresh)==true)
   {
-    resetMenuState();
+    window.optStats.data_order = "desc";
+    window.optStats.retweet_only = false;
+    window.optStats.media_only = false;
+    window.optStats.search_term.tweets.keyword = null;
+    window.optStats.search_term.tweets.found = 0;
+    window.optStats.search_term.replies.keyword = null;
+    window.optStats.search_term.replies.found = 0;
+    window.optStats.search_term.likes.keyword = null;
+    window.optStats.search_term.likes.found = 0;
     $(".tab-content #nav-tweets #tweets-data").empty();
     delete window.YTD.tweets.part0;
     delete window.YTD.like.part0;
@@ -1343,20 +987,18 @@ function preparePosts(page=1, refresh=false)
            }
            bottom = ((page*window.optStats.displayPerPage)-window.optStats.displayPerPage);
            up = page*window.optStats.displayPerPage;
-           grabDBinfo();
            count = 0;
-           if(window.optStats.stats.search.tweets.keyword!=null || window.optStats.stats.search.replies.keyword!=null)
+           if(window.optStats.search_term.tweets.keyword!=null || window.optStats.search_term.replies.keyword!=null)
            {
-             if(window.optStats.active_tab=="tweets" && window.optStats.stats.search.tweets.keyword!==null && window.optStats.stats.search.tweets.active && window.optStats.search_mode)
+             if(window.optStats.active_tab=="tweets" && window.optStats.search_term.tweets.keyword!==null)
              {
-               window.optStats.stats.search.tweets.found =  window.YTD.tweets.part0.filter(e => (e.tweet.entities.user_mentions.filter(a => a.name.indexOf(window.optStats.stats.search.tweets.keyword) > -1).length>0) || (e.tweet.full_text.includes(window.optStats.stats.search.tweets.keyword.toLowerCase()))).length;
-               alert("Ketemu : "+window.optStats.stats.search.tweets.found)
+               window.optStats.search_term.tweets.found = window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.search_term.tweets.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)!="@").length;
                if(window.optStats.media_only==true)
                {
-                if(window.optStats.stats.search.tweets.found>0)
+                if(window.optStats.search_term.tweets.found>0)
                 {
                  temp = ""; idx=0;
-                 window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.stats.search.tweets.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)!=='undefined' && e.tweet.extended_entities.media.length>1).forEach(e => {
+                 window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.search_term.tweets.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)!=='undefined' && e.tweet.extended_entities.media.length>1).forEach(e => {
                   if(count>=bottom && count<up)
                   {
                     src = updateLinks(e);
@@ -1371,10 +1013,10 @@ function preparePosts(page=1, refresh=false)
                }
                else
                {
-              if(window.optStats.stats.search.tweets.found>0)
+              if(window.optStats.search_term.tweets.found>0)
               {
                temp = ""; idx=0;
-               window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.stats.search.tweets.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)!="@").forEach(e => {
+               window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.search_term.tweets.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)!="@").forEach(e => {
                   if(count>=bottom && count<up)
                   {
                     src = updateLinks(e);
@@ -1388,7 +1030,7 @@ function preparePosts(page=1, refresh=false)
               } else alert("No records found !!!");
                }
              }
-             else if(window.optStats.active_tab=="replies" && window.optStats.stats.search.replies.keyword!==null)
+             else if(window.optStats.active_tab=="replies" && window.optStats.search_term.replies.keyword!==null)
              {
                window.optStats.search_term.replies.found = window.YTD.tweets.part0.filter(e => e.tweet.full_text.toLowerCase().includes(window.optStats.search_term.replies.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)=="@").length;
                
@@ -1411,179 +1053,148 @@ function preparePosts(page=1, refresh=false)
            }
            else
            {
-             //Normal Unfiltered Mode
              if (window.optStats.active_tab=="tweets" || window.optStats.active_tab=="replies") 
              {
-               if(window.optStats.active_tab=="tweets")
+               window.optStats.total_tweets = window.YTD.tweets.part0.length;
+               window.optStats.tweet_count = window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)!=="RT @" && e.tweet.full_text.substring(0,1)!=="@").length;
+              window.optStats.retweet_count = window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)==="RT @").length;
+              window.optStats.reply_count = window.YTD.tweets.part0.filter(e => typeof(e.tweet.in_reply_to_user_id)!=='undefined' && e.tweet.full_text.substring(0,1)=="@").length;
+           
+             if(window.optStats.active_tab=="tweets")
+             {
+              /* Retweets Posts */
+              if(window.optStats.active_tab=="tweets" && Boolean(window.optStats.retweet_only)==true)
+              {
+               temp = ""; idx = 0;
+               if(window.YTD.retweets.part0.length>0)
                {
-                 /* Retweets Posts */
-                 if(Boolean(window.optStats.retweet_only)==true)
+                 for(k=0; k<window.YTD.retweets.part0.length; k++)
                  {
-                   if(Boolean(window.optStats.media_only)==true)
-                   {
-                     if(window.YTD.retweets.part0.length>0 && window.YTD.retweets.part0.length==window.YTD.tweets.part0.filter(a => a.tweet.full_text.substring(0,4)=="RT @").length)
-                     {
-                       temp = ""; idx = 0;
-                       window.YTD.retweets.part0.filter(e => typeof(e.tweet.extended_entities)!=='undefined').forEach(e => {
-                      if(count>=bottom && count<up)
-                        {
-                          src = updateLinks(e);
-                          src = updateHashtagUser(src, e);
-                          src = updateMedia(src, e, idx);
-                          temp += appendPosts(src, e);
-                          idx++;
-                        }
-                        count++;
-                      });
-                     }
-                     else
-                     {
-                       temp = ""; idx = 0;
-                       window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)!=='undefined').forEach(e => {
-                      if(count>=bottom && count<up)
-                        {
-                          src = updateLinks(e);
-                          src = updateHashtagUser(src, e);
-                          src = updateMedia(src, e, idx);
-                          temp += appendPosts(src, e);
-                          idx++;
-                        }
-                        count++;
-                      });
-                     }
-                   }
-                   else
-                   {
-                     if(window.optStats.text_only)
-                     {
-                       if(window.YTD.retweets.part0.length>0 && window.YTD.retweets.part0.length==window.YTD.tweets.part0.filter(a => a.tweet.full_text.substring(0,4)=="RT @").length && window.YTD.retweets.part0.filter(a => typeof(a.tweet.extended_entities)=='undefined').length>0)
-                       {
-                           temp = ""; idx = 0;
-                           window.YTD.retweets.part0.filter(e => typeof(e.tweet.extended_entities)=='undefined').forEach(e=>{
-                             if(count>=bottom && count<up)
-                           {
-                             src = updateLinks(e);
-                             src = updateHashtagUser(src, e);
-                             src = updateMedia(src, e, idx);
-                             temp += appendPosts(src, e);
-                             idx++;
-                             }
-                             count++;
-                          });
-                       }
-                       else
-                       {
-                          temp = ""; idx = 0;
-                          window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)=='undefined').forEach(e=>{
-                           if(count>=bottom && count<up)
-                           {
-                             src = updateLinks(e);
-                             src = updateHashtagUser(src, e);
-                             src = updateMedia(src, e, idx);
-                             temp += appendPosts(src, e);
-                             idx++;
-                             }
-                             count++;
-                          });
-                       }
-                     }
-                     else
-                     {
-                       if(window.YTD.retweets.part0.length>0 && window.YTD.retweets.part0.length==window.YTD.tweets.part0.filter(a => a.tweet.full_text.substring(0,4)=="RT @").length)
-                       {
-                         temp = ""; idx = 0;
-                          window.YTD.retweets.part0.forEach(e=>{
-                           if(count>=bottom && count<up)
-                          {
-                            src = updateLinks(e);
-                            src = updateHashtagUser(src, e);
-                            src = updateMedia(src, e, idx);
-                            temp += appendPosts(src, e);
-                            idx++;
-                          }
-                          count++;
-                       });
-                       }
-                       else
-                       {
-                          temp = ""; idx = 0;
-                          window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @").forEach(e=>{
-                           if(count>=bottom && count<up)
-                          {
-                            src = updateLinks(e);
-                            src = updateHashtagUser(src, e);
-                            src = updateMedia(src, e, idx);
-                            temp += appendPosts(src, e);
-                            idx++;
-                          }
-                          count++;
-                       });
-                       }
-                     }
-                   }
+                  if(k>=bottom && k<up)
+                  {
+                    e = window.YTD.retweets.part0[k];
+                   src = updateLinks(e);
+                   src = updateHashtagUser(src, e);
+                   src = updateMedia(src, e, idx);
+                   temp += appendPosts(src, e);
+                   idx++;
+                  }
+                  else if(k>bottom) break;
                  }
-                 else
-                 {
-                    /* Main Tweets */
-                    if(!window.optStats.retweet_only)
+               }
+               else
+               {
+                 window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,4)==="RT @").forEach(e => {
+                    if(count>=bottom && count<up)
                     {
-                      temp = ""; idx=0;
-                      if(window.optStats.media_only)
+                      src = updateLinks(e);
+                      src = updateHashtagUser(src, e);
+                      src = updateMedia(src, e, idx);
+                      temp += appendPosts(src, e);
+                      idx++;
+                    }
+                    count++;
+                 });
+               }
+              }
+             
+              /* Main Tweets */
+              if(window.optStats.active_tab=="tweets" && !window.optStats.retweet_only)
+             {
+                temp = ""; idx=0;
+                if(window.optStats.media_only==true)
+                {
+                  if(window.YTD.retweets.part0.length>0)
+                  {
+                     window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!=="@" && typeof(e.tweet.extended_entities)!=='undefined' && e.tweet.extended_entities.media.length>-1 || e.tweet.full_text.substring(0,2)=="RT").forEach(k =>
+                {
+                  len = window.YTD.retweets.part0.filter(y => y.tweet.id == k.tweet.id && typeof(y.tweet.extended_entities)!=='undefined' && y.tweet.extended_entities.media.length>-1).length;
+                  if(count>=bottom && count<up)
+                  {
+                    if(len>0)
+                    {
+                       window.YTD.retweets.part0.filter(y => y.tweet.id == k.tweet.id && typeof(y.tweet.extended_entities)!=='undefined' && y.tweet.extended_entities.media.length>-1).forEach(z => {
+                      src = updateLinks(z);
+                      src = updateHashtagUser(src, z);
+                      src = updateMedia(src, z, idx);
+                      temp += appendPosts(src, z);
+                      idx++;
+                    });
+                    }
+                    else
+                    {
+                      if(k.tweet.full_text.substring(0,2)!=="RT")
                       {
-                        window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)!='undefined').forEach(e =>
-                        {
-                          if(count>=bottom && count<up)
-                          {
-                            src = updateLinks(e)
-                            src = updateHashtagUser(src, e);
-                            src = updateMedia(src, e, idx);
-                            temp += appendPosts(src, e);
-                         idx++;
-                       }
-                       count++;
-                      });
+                        src = updateLinks(k);
+                        src = updateHashtagUser(src, k);
+                        src = updateMedia(src, k, idx);
+                        temp += appendPosts(src, k);
+                        idx++;
+                      }
+                    }
+                  }
+                  if(len>0 || typeof(k.tweet.extended_entities)!=='undefined') count++;
+                });
+                  }
+                  else
+                  {
+                  window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!=="@" && typeof(e.tweet.extended_entities)!=='undefined' && e.tweet.extended_entities.media.length>-1).forEach(e =>
+                {
+                  if(count>=bottom && count<up)
+                  {
+                    src = updateLinks(e);
+                    src = updateHashtagUser(src, e);
+                    src = updateMedia(src, e, idx);
+                    temp += appendPosts(src, e);
+                    idx++;
+                  }
+                  count++;
+                });
+                  }
+                window.optStats.filtered_count = count;
+                }
+                else
+                {
+                    window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!=="@").forEach(e =>
+                {
+                  if(count>=bottom && count<up)
+                  {
+                    if(e.tweet.full_text.substring(0,2)=="RT")
+                    {
+                      if(window.YTD.retweets.part0.length>0)
+                      {
+                        window.YTD.retweets.part0.filter(m => e.tweet.id == m.tweet.id).forEach(z => {
+                        src = updateLinks(z);
+                        src = updateHashtagUser(src, z);
+                        src = updateMedia(src, z, idx);
+                        temp += appendPosts(src, z)
+                     })
                       }
                       else
                       {
-                        if(window.optStats.text_only)
-                        {
-                          temp = ""; idx = 0;
-                          window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)=='undefined').forEach(e =>
-                        {
-                          if(count>=bottom && count<up)
-                          {
-                             src = updateLinks(e);
-                             src = updateHashtagUser(src, e);
-                             src = updateMedia(src, e, idx);
-                             temp += appendPosts(src, e);
-                             idx++;
-                          }
-                          count++;
-                        });
-                        }
-                        else
-                        {
-                          temp = ""; idx = 0;
-                          window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!="@").forEach(e =>
-                        {
-                          if(count>=bottom && count<up)
-                          {
-                             src = updateLinks(e);
-                             src = updateHashtagUser(src, e);
-                             src = updateMedia(src, e, idx);
-                             temp += appendPosts(src, e);
-                             idx++;
-                          }
-                          count++;
-                        });
-                        }
+                        src = updateLinks(e);
+                        src = updateHashtagUser(src, e);
+                        src = updateMedia(src, e, idx);
+                        temp += appendPosts(src, e);
                       }
                     }
-                 }
-              }
-              else if(window.optStats.active_tab=="replies")
-            {
-               if(window.optStats.stats.search.replies.keyword==null)
+                    else
+                    {
+                       src = updateLinks(e);
+                       src = updateHashtagUser(src, e);
+                       src = updateMedia(src, e, idx);
+                       temp += appendPosts(src, e);
+                    }
+                    idx++;
+                  }
+                  count++;
+                });
+                }
+             }
+           }
+             else if(window.optStats.active_tab=="replies")
+             {
+               if(window.optStats.search_term.replies.keyword==null)
                {
                  temp = ""; idx=0;
                  if(window.optStats.media_only==true)
@@ -1599,25 +1210,10 @@ function preparePosts(page=1, refresh=false)
                   }
                   count++;
                  });
+                 window.optStats.filtered_count = count;
                  }
                  else
                  {
-                   if(window.optStats.text_only)
-                   {
-                     window.YTD.tweets.part0.filter(e => typeof(e.tweet.in_reply_to_user_id)!=='undefined' && e.tweet.full_text.substring(0,1)=="@" && typeof(e.tweet.extended_entities)=='undefined').forEach(e => {
-                      if(count>=bottom && count<up)
-                      {
-                        src = updateLinks(e);
-                        src = updateHashtagUser(src, e);
-                        src = updateMedia(src, e, idx);
-                        temp += appendPosts(src, e);
-                        idx++;
-                      }
-                      count++;
-                     });
-                   }
-                   else
-                   {
                    window.YTD.tweets.part0.filter(e => typeof(e.tweet.in_reply_to_user_id)!=='undefined' && e.tweet.full_text.substring(0,1)=="@").forEach(e => {
                    if(count>=bottom && count<up)
                    {
@@ -1629,14 +1225,13 @@ function preparePosts(page=1, refresh=false)
                   }
                   count++;
                  });
-                   }
                  }
                }
              }
-           }
           }
-          if(typeof(temp)!='undefined' && temp.length>0)
-          {
+           }
+           if(typeof(temp)!='undefined' && temp.length>0)
+           {
              if(window.optStats.active_tab=="tweets")
              {
                $(".tab-content #nav-tweets #tweets-data").empty();
@@ -1650,10 +1245,10 @@ function preparePosts(page=1, refresh=false)
                  delete temp;
              }
              setImgPrev();
-          }
-          setPagination(page);
-          if($(".app-loader").css("visibility")=="visible") $(".app-loader").css("visibility", "hidden");
-        }
+           }
+           setPagination(page);
+           if($(".app-loader").css("visibility")=="visible") $(".app-loader").css("visibility", "hidden");
+         }
      });
     }
   }
@@ -1682,7 +1277,7 @@ function preparePosts(page=1, refresh=false)
            
            const urlRegex = /(https?:\/\/[^\s]+)/g;
            source = "";
-           if(window.optStats.stats.search.likes.keyword!=null)
+           if(window.optStats.search_term.likes.keyword!=null)
            {
              m=0;
              if(window.YTD.like.part0.length>0)
@@ -1692,7 +1287,7 @@ function preparePosts(page=1, refresh=false)
                  i = start;
                   update_txt = String(window.YTD.like.part0[i].like.fullText).toLowerCase();
                   template = String(window.YTD.like.part0[i].like.fullText);
-                  exist = update_txt.includes(window.optStats.stats.search.likes.keyword.toLowerCase());
+                  exist = update_txt.includes(window.optStats.search_term.likes.keyword.toLowerCase());
                   if(exist)
                   {
                     bottom = (page*window.optStats.displayPerPage)-window.optStats.displayPerPage;
@@ -1733,9 +1328,9 @@ function preparePosts(page=1, refresh=false)
                      }
                   }
 
-                  reg = new RegExp("(?<!23)"+window.optStats.stats.search.likes.keyword+"|((?<=.+.>)"+window.optStats.stats.search.likes.keyword+")(?=<\/a>)|(?<=#|>)(?<!%23)"+window.optStats.stats.search.likes.keyword+"(?!\.\")|(?<=[a-zA-Z]+)"+window.optStats.stats.search.likes.keyword, "ig");
+                  reg = new RegExp("(?<!23)"+window.optStats.search_term.likes.keyword+"|((?<=.+.>)"+window.optStats.search_term.likes.keyword+")(?=<\/a>)|(?<=#|>)(?<!%23)"+window.optStats.search_term.likes.keyword+"(?!\.\")|(?<=[a-zA-Z]+)"+window.optStats.search_term.likes.keyword, "ig");
                  
-                   template = template.replace(reg, "<b><i style=\" color: "+window.optStats.keywordHilite+"\">"+window.optStats.stats.search.likes.keyword+"</i></b>");
+                   template = template.replace(reg, "<b><i style=\" color: "+window.optStats.keywordHilite+"\">"+window.optStats.search_term.likes.keyword+"</i></b>");
                      source += "<div class=\"tweet-post\"><div class=\"col-lg-6 px-0\"><div class=\"retweeted\"><span></span></div><div class=\"tweet-avatar\"><img id=\"avatar-logo\"></div><div class=\"tweet-connector standalone\"><p class=\"common-text tweet-post-content\"><span id=\"likened-tweet\">"+template+"</span></p><p class=\"tweet-post-action common-text\"><ul class=\"post-action-btn\"><li><a class=\"fa fa-comment-o\"><span></span></a></li><li><a class=\"fa fa-retweet\"><span></span></a></li><li><a class=\"fa fa-heart\" style=\"color:red\"><span></span></a></li><li class=\"dropdown action-btn-last like-menu\"><a data-bs-toggle=\"dropdown\" role=\"link\" aria-expanded=\"false\" class=\"fa fa-share-alt\"></a><div class=\"dropdown-menu dropdown-menu-end\"><div id=\""+window.YTD.like.part0[i].like.expandedUrl+"\"><a class=\"dropdown-item\"><i class=\"fa fa-link\"></i>Open on twitter</a></div><div id=\""+window.YTD.like.part0[i].like.tweetId+"\"><a class=\"dropdown-item\"><i class=\"fa fa-info-circle\"></i>Show tweet id</a></div></div></li></ul></p></div></div><div class=\"clearfix\"></div></div>";
                     }
                     m++;
@@ -1746,7 +1341,7 @@ function preparePosts(page=1, refresh=false)
                 
                 $(".tab-content #nav-like #like-data").empty();
                 $(".tab-content #nav-like #like-data").append(source);
-                window.optStats.stats.search.likes.found = m;
+                window.optStats.search_term.likes.found = m;
                 $(".like-menu .dropdown-menu a").click(function(){
                   if(String($(this).parent().attr("id")).substring(0,4)=="http")
                      window.open($(this).parent().attr("id"));
@@ -1755,9 +1350,11 @@ function preparePosts(page=1, refresh=false)
                delete window.YTD.like.part0;
              }
            }
-           else if(window.optStats.stats.search.likes.keyword==null)
+           else if(window.optStats.search_term.likes.keyword==null)
            {
-             if(window.optStats.stats.total_likes>0)
+             if(window.YTD.like.part0.length>0) window.optStats.like_count = window.YTD.like.part0.length;
+             
+             if(window.optStats.like_count>0)
              {
                bottom = ((end==0)?(window.YTD.like.part0.length-(page*window.optStats.displayPerPage)):((page*window.optStats.displayPerPage)-window.optStats.displayPerPage));
                up = ((end==0)?((window.YTD.like.part0.length-(page*window.optStats.displayPerPage))+window.optStats.displayPerPage):(page*window.optStats.displayPerPage));
@@ -1770,67 +1367,16 @@ function preparePosts(page=1, refresh=false)
                  i = start;
                  if(start>=bottom && start<up)
                  {
-                  
-                  if(typeof(window.YTD.like.part0[i].like.full_name)!='undefined' && typeof(window.YTD.like.part0[i].like.source_url)!='undefined' && typeof(window.YTD.like.part0[i].like.media)!='undefined')
-                  {
                     template = window.YTD.like.part0[i].like.fullText;
-                    
-                    if(typeof(window.YTD.like.part0[i].like.urls)!='undefined')
+                    if(window.YTD.like.part0[i].like.fullText.match(urlRegex)!==null)
                   {
-                    for(m=0; m<window.YTD.like.part0[i].like.urls.length; m++)
-                    {
-                      template = template.replace(window.YTD.like.part0[i].like.urls[m].url, "<a href=\""+window.YTD.like.part0[i].like.urls[m].expanded_url+"\">"+window.YTD.like.part0[i].like.urls[m].displayed_url+"</a>");
-                    }
-                    if(window.YTD.like.part0[i].like.media.length>0)
-                    {
-                      for(z=0; z<window.YTD.like.part0[i].like.media.length; z++)
-                     template = template.replace(window.YTD.like.part0[i].like.media[z].url, "<img id=\"img-prev_single\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[0].filename+"\" />");
-                    }
-                  }
-                  else
-                  {
-                    urlReg = /https:\/\/t.co\/[a-zA-Z0-9\_\.\-]+/igm;
-                    regex = new RegExp(urlReg);
-                    t = [];
-                    t = template.match(regex);
-                    if(t.length==1)
-                    {
-                      if(window.YTD.like.part0[i].like.media.length==1)
-                       template = template.replace(t[0], "<img id=\"img-prev_single\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[0].filename+"\" />");
-                     if(window.YTD.like.part0[i].like.media.length>1)
+                     t = window.YTD.like.part0[i].like.fullText.match(urlRegex);
+                     if(t.length>0)
                      {
-                       img = [];
-                       for(z=0; z<window.YTD.like.part0[i].like.media.length; z++)
-                     {
-                       if(window.YTD.like.part0[i].like.media[z].length==1)
-                        template = template.replace(window.YTD.like.part0[i].like.media[z].url, "<img id=\"img-prev_single\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[0].filename+"\" />");
-                        if(window.YTD.like.part0[i].like.media.length==2)
-                        {
-                        if(z==0)
-                          img[img.length] = "<img class=\"img-prev_double-1st\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[z].filename+"\" />";
-                        else 
-                          img[img.length] = "<img class=\"img-prev_double-2nd\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[z].filename+"\" />";
-                        }
-                        if(window.YTD.like.part0[i].like.media.length==3)
-                        {
-                          if(z==0)
-                          img[img.length] = "<img class=\"img-prev_triple-1st\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[z].filename+"\" />";
-                          else if(z==1)
-                            img[img.length] = "<img class=\"img-prev_triple-2nd\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[z].filename+"\" />";
-                          else if(z==2)
-                            img[img.length] = "<img class=\"img-prev_triple-3rd\" src=\"data/likes_media/"+window.YTD.like.part0[i].like.media[z].filename+"\" />";
-                        }
-                     }
-                     if(window.YTD.like.part0[i].like.media.length==2) template = template.replace(window.YTD.like.part0[i].like.media[0].url, 
-                     "<div class=\"double_img-prev\">"+img.join("")+"</div>")
-                       if(window.YTD.like.part0[i].like.media.length==3) template = template.replace(window.YTD.like.part0[i].like.media[0].url, 
-                     "<div class=\"triple_img-prev\">"+img.join("")+"</div>")
-                     }
-                   }
-                   else if(t.length>1)
-                   {
-                     
-                   }
+                       t.forEach(e => {
+                          template = template.replace(e, "<a target=\"_blank\" href=\""+e+"\">"+e+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
+                        });
+                      }
                   }
                   usrReg = /(\@[A-Za-z0-9\_\-]+)/g;
                   if(window.YTD.like.part0[i].like.fullText.match(usrReg)!==null)
@@ -1856,58 +1402,7 @@ function preparePosts(page=1, refresh=false)
                      }
                   }
 
-                    uname = window.YTD.like.part0[i].like.source_url.split("\/");
-                    post_date = new Date(Math.floor(new Date(window.YTD.like.part0[i].like.post_date).getTime()));
-                    source += "<div class=\"tweet-post\"><div class=\"col-lg-6 px-0\"><div class=\"tweet-avatar\"><img id=\"avatar-logo\"></div><div class=\"tweet-connector standalone\"><div class=\"tweet-post-acc\"><span style=\"font-weight:bold; margin-right:10px\">"+((window.YTD.like.part0[i].like.full_name.length>10)?window.YTD.like.part0[i].like.full_name.substring(0,9)+"...":window.YTD.like.part0[i].like.full_name)+"</span><span class=\"common-text greyed-text\"><a class=\"default-link\" target=\"_blank\" href=\"https://twitter.com/"+uname[3]+"\">@"+((uname[3].length>8)?uname[3].substring(0,8)+"...":uname[3])+"</a> • "+post_date.toLocaleString("en-US",{ month : 'short', day : 'numeric', year : 'numeric' })+"</span></div><p class=\"common-text tweet-post-content\"><span id=\"likened-tweet\">"+template+"</span></p><p class=\"tweet-post-action common-text\"><ul class=\"post-action-btn\"><li><a class=\"fa fa-comment-o\"><span>"+((window.YTD.like.part0[i].like.reply_count>0)?NumFormat(window.YTD.like.part0[i].like.reply_count):"")+"</span></a></li><li><a class=\"fa fa-retweet\"><span>"+((window.YTD.like.part0[i].like.retweet_count>0)?NumFormat(window.YTD.like.part0[i].like.retweet_count):"")+"</span></a></li><li><a class=\"fa fa-heart\" style=\"color:red\"><span>"+NumFormat(window.YTD.like.part0[i].like.like_count)+"</span></a></li><li class=\"dropdown action-btn-last like-menu\"><a data-bs-toggle=\"dropdown\" role=\"link\" aria-expanded=\"false\" class=\"fa fa-share-alt\"></a><div class=\"dropdown-menu dropdown-menu-end\"><div id=\""+window.YTD.like.part0[i].like.source_url+"\"><a class=\"dropdown-item\"><i class=\"fa fa-link\"></i>Open on twitter</a></div><div id=\""+window.YTD.like.part0[i].like.tweetId+"\"><a class=\"dropdown-item\"><i class=\"fa fa-info-circle\"></i>Show tweet id</a></div></div></li></ul></p></div></div><div class=\"clearfix\"></div></div>";
-                  }
-                  else
-                  {
-                    template = window.YTD.like.part0[i].like.fullText;
-                    if(typeof(window.YTD.like.part0[i].like.urls)!='undefined')
-                  {
-                    for(m=0; m<window.YTD.like.part0[i].like.urls.length; m++)
-                    {
-                      template = template.replace(window.YTD.like.part0[i].like.urls[m].url, "<a href=\""+window.YTD.like.part0[i].like.urls[m].expanded_url+"\">"+window.YTD.like.part0[i].like.urls[m].displayed_url+"</a>");
-                    }
-                  }
-                  else
-                  {
-                    if(window.YTD.like.part0[i].like.fullText.match(urlRegex)!==null)
-                  {
-                     t = window.YTD.like.part0[i].like.fullText.match(urlRegex);
-                     if(t.length>0)
-                     {
-                       t.forEach(e => {
-                          template = template.replace(e, "<a target=\"_blank\" href=\""+e+"\">"+e+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
-                        });
-                      }
-                  }
-                  }
-                  usrReg = /(\@[A-Za-z0-9\_\-]+)/g;
-                  if(window.YTD.like.part0[i].like.fullText.match(usrReg)!==null)
-                  {
-                    t = window.YTD.like.part0[i].like.fullText.match(usrReg);
-                    if(t.length>0)
-                     {
-                       t.forEach(e => {
-                          template = template.replace(e, "<a target=\"_blank\" href=\"https://twitter.com/"+e.substring(1,e.length)+"\">"+e+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
-                        });
-                     }
-                  }
-                  
-                  usrReg = /(\#[A-Za-z0-9\_\-]+)/g;
-                  if(window.YTD.like.part0[i].like.fullText.match(usrReg)!==null)
-                  {
-                    t = window.YTD.like.part0[i].like.fullText.match(usrReg);
-                    if(t.length>0)
-                     {
-                       t.forEach(e => {
-                          template = template.replace(e, "<a target=\"_blank\" href=\"https://twitter.com/search?q="+escape("#")+e.substring(1,e.length)+"&src=typed_query\">"+e+"</a>").replace(/(\r\n|\r|\n)/g, "<br/>");
-                        });
-                     }
-                  }
-                     source += "<div class=\"tweet-post\"><div class=\"col-lg-6 px-0\"><div class=\"retweeted\"><span></span></div><div class=\"tweet-avatar\"><img id=\"avatar-logo\"></div><div class=\"tweet-connector standalone\"><p class=\"common-text tweet-post-content\"><span id=\"likened-tweet\">"+template+"</span></p><p class=\"tweet-post-action common-text\"><ul class=\"post-action-btn\"><li><a class=\"fa fa-comment-o\"><span></span></a></li><li><a class=\"fa fa-retweet\"><span></span></a></li><li><a class=\"fa fa-heart\" style=\"color:red\"><span></span></a></li><li class=\"dropdown action-btn-last like-menu\"><a data-bs-toggle=\"dropdown\" role=\"link\" aria-expanded=\"false\" class=\"fa fa-share-alt\"></a><div class=\"dropdown-menu dropdown-menu-end\"><div id=\""+window.YTD.like.part0[i].like.expandedUrl+"\"><a class=\"dropdown-item\"><i class=\"fa fa-link\"></i>Open on twitter</a></div><div id=\""+window.YTD.like.part0[i].like.tweetId+"\"><a class=\"dropdown-item\"><i class=\"fa fa-info-circle\"></i>Show tweet id</a></div></div></li></ul></p></div></div><div class=\"clearfix\"></div></div>";
-                  }
+                  source += "<div class=\"tweet-post\"><div class=\"col-lg-6 px-0\"><div class=\"retweeted\"><span></span></div><div class=\"tweet-avatar\"><img id=\"avatar-logo\"></div><div class=\"tweet-connector standalone\"><p class=\"common-text tweet-post-content\"><span id=\"likened-tweet\">"+template+"</span></p><p class=\"tweet-post-action common-text\"><ul class=\"post-action-btn\"><li><a class=\"fa fa-comment-o\"><span></span></a></li><li><a class=\"fa fa-retweet\"><span></span></a></li><li><a class=\"fa fa-heart\" style=\"color:red\"><span></span></a></li><li class=\"dropdown action-btn-last like-menu\"><a data-bs-toggle=\"dropdown\" role=\"link\" aria-expanded=\"false\" class=\"fa fa-share-alt\"></a><div class=\"dropdown-menu dropdown-menu-end\"><div id=\""+window.YTD.like.part0[i].like.expandedUrl+"\"><a class=\"dropdown-item\"><i class=\"fa fa-link\"></i>Open on twitter</a></div><div id=\""+window.YTD.like.part0[i].like.tweetId+"\"><a class=\"dropdown-item\"><i class=\"fa fa-info-circle\"></i>Show tweet id</a></div></div></li></ul></p></div></div><div class=\"clearfix\"></div></div>";
                  }
                  count++;
                  if(end==0) start--;
@@ -1920,7 +1415,6 @@ function preparePosts(page=1, refresh=false)
                   if(String($(this).parent().attr("id")).substring(0,4)=="http")
                      window.open($(this).parent().attr("id"));
                });
-               setImgPrev();
                setPagination(page);
                delete window.YTD.like.part0;
              }
@@ -1933,7 +1427,7 @@ function preparePosts(page=1, refresh=false)
       unloadJS(window.__THAR_CONFIG.dataTypes.like.files[0].fileName);
        loadJS(window.__THAR_CONFIG.dataTypes.like.files[0].fileName, function(stat)
        {
-         if(stat) window.optStats.stats.total_likes = window.YTD.like.part0.length;
+         if(stat) window.optStats.like_count = window.YTD.like.part0.length;
        });
     }
   }
