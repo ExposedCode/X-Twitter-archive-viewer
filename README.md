@@ -20,6 +20,6 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
     - New JSON dataset on uncensored
       retweets (generate self documentary JSON datasets)
 - v1.7 New features :
-    - media post image description (generate self documentary JSON datasets)
+    - Media post image ALT description (generate self documentary JSON datasets)
 - v1.5 Added features :
     - New multimedia filter menu
