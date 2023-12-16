@@ -16,10 +16,10 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 - Run index.html on Opera browser using file:///storage/emulated/0/Your_Android_App_Folder/index.html
 
 # Update notes & bug fixes
-- v1.8 Added new features :
+- v1.8 New features :
     - New JSON dataset on uncensored
       retweets (generate self documentary JSON datasets)
-- v1.7 Added new features :
-    - New image description (generate self documentary JSON datasets)
+- v1.7 New features :
+    - media post image description (generate self documentary JSON datasets)
 - v1.5 Added features :
     - New multimedia filter menu
