@@ -1,0 +1,54 @@
+Twitter Offline Archive Viewer v1.9
+
+This html application is used for viewing twitter data archives downloaded from your twitter account.
+Current beta version is only tested work at android 4 Jelly Bean & android 10 Marshmellow, any other platform has not been tested for web browser css & javascript compatibility.
+Current Javascript & CSS framework used by this html app is from the 3rd party framework like JQuery & Bootstrap.
+If you have interested to modify the javascript code or CSS stylesheet for your own taste, you can modify the main files at scripts/css/profile.css & scripts/js/main.load.min.js (you need to un-minified/uncompressed using an online tool to make you easier to follow the code).
+
+This viewer has been tested work properly on Opera web browser on your android phone, another web browser seems have no support to view local html file.
+In order to view this html app correctly on android 5 or above you can modify the exact location where browser by default supposed to give your active folder under file manager such as :
+
+Default Opera active folder :
+• content://com.file-manager-app.files/storage/emulated/0/Documents/Twitter-Viewer/index.html
+
+you have to change it onto
+
+• file:///storage/emulated/0/Documents/Twitter-Viewer/index.html
+
+
+The previous version & current version has not been tested on twitter JSON data archive greater than 5K or 10K records, it all depends on your phone browser memory available to handle large datasets from your twitter account.
+A larger datasets on twitter JSON dataset may decrease your web browser performance as it will take some amount of your phone memory to process the filtering & sorting the JSON data.
+This is the risk of using client side scripting using such as javascript object notation (JSON) to handle large dataset, it's more advantage for you to use server side scripting when the large dataset is not a real performance problem when JSON based database server such as MongoDB or NoSQL can separate the chunk amount from a large dataset.
+You can test with your own twitter data archive from the main menu "Settings & Support > Settings and Privacy > Your Account > Download an archive of your data" of your twitter account, use with your own risk as it may freeze some of html javascript & browser function if your tweets dataset is too large enough to handle.
+
+note :
+css format only covers mobile phone opera browser & desktop site mode as this still in development mode, I have not tested it on pc or laptop as I don't have the time to develop it on pc. If you have encountering css formatting problem please edit & review profile.css for your own taste.
+
+Framework used :
+√ Bootstrap 5.3.0 (https://getbootstrap.com)
+√ jQuery 3.5.1 & jQuery UI (https://www.jquery.com)
+√ MD5Crypt-JS hash library (https://code.google.com/archive/p/crypto-js/)
+√ Font Awesome (https://fontawesome.com/v4)
+
+
+
+№######################№
+New version update info
+№######################№
+
+v1.5 added features :
+- Added multimedia post filter menu
+
+v1.7 added features :
+- Added image description json datasets
+
+v1.8 added features :
+- Updated separated json datasets for uncensored retweets
+
+v1.9 added features :
+- Major javascript updates, bug fixes, and Multimedia CSS layout updates
+- New tweet filter without images
+
+Notes :
+For next update on javascript bug fixes, css updates or any json database update you can visit this link :
+• https://bit.ly/twitter-viewer-update
