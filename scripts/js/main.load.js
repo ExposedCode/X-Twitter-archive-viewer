@@ -1022,7 +1022,7 @@ function updateMedia(txt, d, index=-1)
                     else if(window.opt.active_tab=="replies")
                     {
                        $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, window.opt.cache.filter(e=>e.id==va.id)[0].content.replace("<!--template-->", vdo)));
-                       if(va.id=="1611047379326873600") alert($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html());
+                       
                       //alert("Before : "+window.opt.cache.length)
                       window.opt.cache = window.opt.cache.filter(e=>e.id!=va.id);
                       //alert("After : "+window.opt.cache.length)
