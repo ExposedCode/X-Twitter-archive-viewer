@@ -2,7 +2,7 @@
 /*    XTwitter offline archive viewer    */
 /*              Version 1.9              */
 /*                                       */
-/*        Code Author : @ExposedCode           */
+/*      Code Author : @ExposedCode       */
 /*#######################################*/
 
 window.YTD = {
@@ -258,45 +258,6 @@ function InitiateButton()
     if(String($(this).html()).indexOf("fa-refresh")!==-1)
     {
       resetMenuState(true);
-      /*window.opt.media_only = false;
-      if($(this).parent().parent().find(".fa-file-image-o").parent().hasClass("dropdown-item-checked"))
-           $(this).parent().parent().find(".fa-file-image-o").parent().removeClass("dropdown-item-checked");
-           
-      if(window.opt.active_tab=="tweets")
-      {
-        window.opt.data_order = "desc";
-        window.opt.retweet_only = false;
-        window.opt.search_term.tweets.keyword = null;
-        window.opt.search_term.tweets.found = 0;
-        window.opt.search_term.replies.keyword = null;
-        window.opt.search_term.replies.found = 0;
-        window.opt.search_term.likes.keyword = null;
-        window.opt.search_term.likes.found = 0;
-        if($(this).parent().parent().find(".fa-retweet").parent().hasClass("dropdown-item-checked"))
-           $(this).parent().parent().find(".fa-retweet").parent().removeClass("dropdown-item-checked");
-
-        if($(this).parent().parent().find(".fa-sort-alpha-desc").parent().html()!='undefined')
-        {
-          $(this).parent().parent().find(".fa-sort-alpha-desc").parent().html("<i class=\"fa fa-sort-alpha-asc\"></i>Show Oldest First");
-        }
-        preparePosts();
-      }
-      else if(window.opt.active_tab=="replies")
-      {
-        window.opt.search_term.replies.keyword = null;
-        window.opt.data_order ="desc";
-        if($(this).parent().parent().find(".fa-sort-alpha-desc").parent().html()!='undefined')
-        {
-          $(this).parent().parent().find(".fa-sort-alpha-desc").parent().html("<i class=\"fa fa-sort-alpha-asc\"></i>Show Oldest First");
-        }
-        preparePosts();
-      }
-      else if(window.opt.active_tab=="likes")
-      {
-        window.opt.search_term.likes.keyword = null;
-        window.opt.data_order ="desc";
-        preparePosts();
-      }*/
     }
     if(String($(this).html()).indexOf("fa-search")!==-1)
     {
@@ -1022,10 +983,7 @@ function updateMedia(txt, d, index=-1)
                     else if(window.opt.active_tab=="replies")
                     {
                        $(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html($(".tab-content #nav-replies #replies-data").children('div').eq(idx).find('p').children(":first").html().replace(va.extended_entities.media[lastIdx].url, window.opt.cache.filter(e=>e.id==va.id)[0].content.replace("<!--template-->", vdo)));
-                       
-                      //alert("Before : "+window.opt.cache.length)
                       window.opt.cache = window.opt.cache.filter(e=>e.id!=va.id);
-                      //alert("After : "+window.opt.cache.length)
                     }
                     setImgPrev();
                   }
@@ -1288,12 +1246,6 @@ function grabDBinfo()
   if(window.opt.stats.post_text==0)
      window.opt.stats.post_text = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)!="RT @" && e.tweet.full_text.substring(0,1)!="@" && typeof(e.tweet.extended_entities)=='undefined').length;
   
-  if(window.opt.stats.retweet_with_media==0)
-     window.opt.stats.retweet_with_media = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)=='object').length;
-  
-  if(window.opt.stats.retweet_text==0)
-     window.opt.stats.retweet_text = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)=='undefined').length;
-  
   if(window.opt.stats.reply_with_media==0)
      window.opt.stats.reply_with_media = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,1)=="@" && typeof(e.tweet.extended_entities)=='object').length;
   
@@ -1319,6 +1271,12 @@ function grabDBinfo()
       
     if(window.opt.stats.retweet_images==0)
       window.opt.stats.retweet_images = window.YTD.retweets.part0.filter(e => typeof(e.tweet.extended_entities)=='object' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length==0).length;
+      
+    if(window.opt.stats.retweet_videos>0 && window.opt.stats.retweet_images>0)
+    {
+     window.opt.stats.retweet_with_media = window.opt.stats.retweet_videos+window.opt.stats.retweet_images;
+     window.opt.stats.retweet_text = window.opt.stats.total_retweet-window.opt.stats.retweet_with_media;
+    }
   }
   else
   {
@@ -1327,8 +1285,13 @@ function grabDBinfo()
      
     if(window.opt.stats.retweet_images==0)
       window.opt.stats.retweet_images = window.YTD.tweets.part0.filter(e=>e.tweet.full_text.substring(0,4)=="RT @" && typeof(e.tweet.extended_entities)!='undefined' && e.tweet.extended_entities.media.filter(a=>a.type=="video").length==0).length;
-  }  
-  //alert("Jumlah post video : "+window.opt.stats.post_videos+"\nJumlah post images : "+window.opt.stats.post_images+"\nJumlah reply video : "+window.opt.stats.reply_videos+"\nJumlah reply images : "+window.opt.stats.reply_images+"\nJumlah retweet video : "+window.opt.stats.retweet_videos+"\nJumlah retweet images : "+window.opt.stats.retweet_images)
+      
+    if(window.opt.stats.retweet_videos>0 && window.opt.stats.retweet_images>0)
+    {
+     window.opt.stats.retweet_with_media = window.opt.stats.retweet_videos+window.opt.stats.retweet_images;
+     window.opt.stats.retweet_text = window.opt.stats.total_retweet-window.opt.stats.retweet_with_media;
+    }
+  }
 }
 
 function preparePosts(page=1, refresh=false)
