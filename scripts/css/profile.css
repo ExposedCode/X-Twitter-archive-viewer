@@ -939,10 +939,10 @@ and (min-width : 1200) {
 }
 
 .img-prev_double-2nd_with-vdo {
-  top: -20px;
+  top: 0px;
   width: 180px;
   height: 260px;
-  left: 175px;
+  left: 180px;
   object-fit: cover;
   position: absolute;
   border: 1px solid #e6e6e6;
@@ -1108,6 +1108,28 @@ and (min-width : 1200) {
   border-radius: 10px 10px 10px 10px;
 }
 
+.vdo_tag-equal_double_1st {
+  width: 180px;
+  height: 260px;
+  object-fit: cover;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px 0px 0px 10px;
+}
+
+.vdo_tag-equal_double_2nd {
+  width: 180px;
+  height: 260px;
+  object-fit: cover;
+  position: absolute;
+  top: -20px;
+  left: 175px;
+  border: 1px solid #e6e6e6;
+  border-radius: 0px 10px 10px 0px;
+}
+
 .vdo_tag-equal_triple_1st {
   width: 180px;
   height: 260px;
@@ -1162,8 +1184,8 @@ and (min-width : 1200) {
   height: 260px;
   object-fit: cover;
   position: relative;
-  top: -20px;
-  left: -5px;
+  top: 0px;
+  left: 0px;
   border: 1px solid #e6e6e6;
   border-radius: 10px 0px 0px 10px;
 }
@@ -1286,8 +1308,8 @@ and (min-width : 1200) {
   height: 260px;
   object-fit: cover;
   position: relative;
-  top: -20px;
-  left: -5px;
+  top: 0px;
+  left: 0px;
   border: 1px solid #e6e6e6;
   border-radius: 10px 0px 0px 10px;
 }
@@ -1480,9 +1502,9 @@ div.alt-left-double-2nd {
 div.alt-left-double-2nd_with-vdo {
   float: bottom;
   position: absolute;
-  bottom: 30px;
+  bottom: 5px;
   width: fit-content;
-  left: 180px;
+  left: 184px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -1831,9 +1853,9 @@ div.alt-gif-horizontal {
 div.alt-gif_double-1st {
   float: bottom;
   position: absolute;
-  bottom: 30px;
+  bottom: 5px;
   width: fit-content;
-  left: 0px;
+  left: 5px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -1847,9 +1869,9 @@ div.alt-gif_double-1st {
 div.alt-gif-double-1st_with-vdo {
   float: bottom;
   position: absolute;
-  bottom: 30px;
+  bottom: 5px;
   width: fit-content;
-  left: 25px;
+  left: 30px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -2641,7 +2663,11 @@ ul.post-action-btn li span {
   width: 120px;
   height: 200px;
   object-fit: cover;
-  border-radius: 10px 0px 0px 10px;
+  position: absolute;
+  top: -20px;
+  left: 120px;
+  border: 1px solid #e6e6e6;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .vdo_tag-horizontal_triple {
@@ -2737,6 +2763,17 @@ ul.post-action-btn li span {
   height: 200px;
   object-fit: cover;
   border-radius: 10px 0px 0px 10px;
+}
+
+.vdo_tag-vertical_double_2nd {
+  width: 120px;
+  height: 200px;
+  object-fit: cover;
+  position: absolute;
+  top: -20px;
+  left: 120px;
+  border: 1px solid #e6e6e6;
+  border-radius: 0px 10px 10px 0px;
 }
 
 .vdo_tag-vertical_triple {
@@ -2890,9 +2927,9 @@ div.alt-left-double-1st {
 div.alt-left-double-1st_with-vdo {
   float: bottom;
   position: absolute;
-  bottom: 5px;
+  bottom: 25px;
   width: fit-content;
-  left: 45px;
+  left: 5px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -2908,7 +2945,23 @@ div.alt-left-double-2nd {
   position: absolute;
   bottom: 5px;
   width: fit-content;
-  left: 165px;
+  left: 125px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+ }
+ 
+div.alt-left-double-2nd_with-vdo {
+  float: bottom;
+  position: absolute;
+  bottom: 5px;
+  width: fit-content;
+  left: 125px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -3142,12 +3195,60 @@ div.alt-left-forth-4th_with-vdo {
   border-radius: 3px;
  }
  
-div.alt-gif_double-2nd {
+div.alt-gif_double-1st {
   float: bottom;
   position: absolute;
   bottom: 5px;
   width: fit-content;
-  left: 125px;
+  left: 5px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+ 
+div.alt-gif-double-1st_with-vdo {
+  float: bottom;
+  position: absolute;
+  bottom: 5px;
+  width: fit-content;
+  left: 30px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+ 
+div.alt-gif_double-2nd {
+  float: bottom;
+  position: absolute;
+  bottom: 25px;
+  width: fit-content;
+  left: 124px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+
+div.alt-gif-double-2nd_with-vdo {
+  float: bottom;
+  position: absolute;
+  bottom: 25px;
+  width: fit-content;
+  left: 148px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -3781,9 +3882,19 @@ ul.post-action-btn {
   height: 260px;
   object-fit: fill;
   position: relative;
-  top: -20px;
-  left: -45px;
+  top: 0px;
+  left: 0px;
   border-radius: 10px 10px 10px 10px;
+}
+
+.vdo_tag-equal_double_1st {
+  width: 120px;
+  height: 139px;
+  object-fit: cover;
+  top: -20px;
+  left: -5px;
+  position: absolute;
+  border-radius: 10px 0px 0px 10px;
 }
 
 .vdo_tag-equal_double_2nd {
