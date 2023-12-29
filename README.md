@@ -2,7 +2,7 @@
 ### HTML & Javascript app to view your offline X/Twitter archive data
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
-XTwitter offline viewer can be used to replace your existing JSON XTwitter archives viewer where sometimes by using original html & javascript app from X/Twitter you can't see the way it was presented like on XTwitter page.
+XTwitter offline viewer can be used to replace your existing JSON XTwitter archives viewer that can be found in your XTwitter application under menu "*Settings & Support > Settings and Privacy > Your Account > Download an archive of your data*" where sometimes by using original html & javascript app from X/Twitter you can't see the way your posts was presented like on XTwitter page.
 
 ## Supported browser
 - [x] [Opera] Android version
