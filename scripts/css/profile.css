@@ -1821,9 +1821,9 @@ div.alt-gif {
 div.alt-gif-equal {
   float: bottom;
   position: absolute;
-  bottom: 100px;
+  bottom: 10px;
   width: fit-content;
-  left: -38px;
+  left: 5px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
@@ -3195,6 +3195,54 @@ div.alt-left-forth-4th_with-vdo {
   border-radius: 3px;
  }
  
+ div.alt-gif-equal {
+  float: bottom;
+  position: relative;
+  bottom: 35px;
+  width: fit-content;
+  left: 5px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+
+div.alt-gif-horizontal {
+  float: bottom;
+  position: relative;
+  bottom: 34px;
+  width: fit-content;
+  left: 5px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+
+div.alt-gif-vertical {
+  float: bottom;
+  position: relative;
+  bottom: 54px;
+  width: fit-content;
+  left: -39px;
+  color: #fff;
+  font-family: Verdana;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #303040;
+  opacity: 80%;
+  padding: 4px 4px 4px 4px;
+  border-radius: 3px;
+}
+ 
 div.alt-gif_double-1st {
   float: bottom;
   position: absolute;
@@ -4274,9 +4322,9 @@ div.alt-gif {
 div.alt-gif-equal {
   float: bottom;
   position: relative;
-  bottom: 54px;
+  bottom: 35px;
   width: fit-content;
-  left: -39px;
+  left: 5px;
   color: #fff;
   font-family: Verdana;
   font-size: 10px;
