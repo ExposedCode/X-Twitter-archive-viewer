@@ -50,5 +50,5 @@ v1.9 added features :
 - New tweet filter without images
 
 Notes :
-For next update on javascript bug fixes, css updates or any json database update you can visit this link :
-• https://bit.ly/twitter-viewer-update
+For the example on how this javascript app work, you can visit this link :
+• https://bit.ly/my-twitter-archive
