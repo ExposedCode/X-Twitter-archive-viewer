@@ -1776,11 +1776,10 @@ function preparePosts(page=1, refresh=false)
                       {
                         if(window.YTD.retweets.part0.length>0 && window.YTD.retweets.part0.length==window.YTD.tweets.part0.filter(a => a.tweet.full_text.substring(0,4)=="RT @").length)
                         {
-                          window.YTD.tweets.part0.filter(a => (a.tweet.full_text.substring(0,1)!="@" && typeof(a.tweet.extended_entities)=='object') || a.tweet.full_text.substring(0,2)=="RT").forEach(e => {
+                          window.YTD.tweets.part0.filter(a => (a.tweet.full_text.substring(0,1)!="@" && typeof(a.tweet.extended_entities)=='object') || a.tweet.full_text.substring(0,4)=="RT @").forEach(e => {
                            if(e.tweet.full_text.substring(0,4)=="RT @")
                            {
                              e = (window.YTD.retweets.part0.filter(k => k.tweet.id == e.tweet.id && typeof(k.tweet.extended_entities)=='object').length==1)?window.YTD.retweets.part0.filter(k => k.tweet.id == e.tweet.id && typeof(k.tweet.extended_entities)=='object')[0]:null;
-                             if(e!=null) retweetMedia++;
                            }
                            if(e!=null && count>=bottom && count<up)
                           {
@@ -1859,7 +1858,9 @@ function preparePosts(page=1, refresh=false)
                           temp = ""; idx = 0;
                           window.YTD.tweets.part0.filter(e => e.tweet.full_text.substring(0,1)!="@").forEach(e =>
                         {
-                          if(count>=bottom && count<up)
+                          if(e.tweet.full_text.substring(0,4)=="RT @" && window.YTD.retweets.part0.length>0 && window.YTD.retweets.part0.length==window.YTD.tweets.part0.filter(a => a.tweet.full_text.substring(0,4)=="RT @").length)
+                            e = (window.YTD.retweets.part0.filter(k => k.tweet.id == e.tweet.id && typeof(k.tweet.extended_entities)=='object').length==1)?window.YTD.retweets.part0.filter(k => k.tweet.id == e.tweet.id && typeof(k.tweet.extended_entities)=='object')[0]:null;
+                          if(e!=null && count>=bottom && count<up)
                           {
                              src = updateLinks(e);
                              src = updateHashtagUser(src, e);
