@@ -857,7 +857,7 @@ function updateLinks(d)
       if(t!=null)
       {
         t.every(m => {
-          dump = dump.replace(m, "<br/><a target=\"_blank\" href=\""+m+"\">"+m.substring(0, 38)+((m.length>38)?"...":"")+"</a>");
+          dump = dump.replace(m, "<br/><a target=\"_blank\" href=\""+m+"\">"+m+"</a>");
           return true;
         });
       }
@@ -984,8 +984,8 @@ function updateMedia(txt, d, index=-1)
                    desc = ((window.YTD.imgalt.part0.filter(a => a.tweet.id == va.id).length==1) && typeof(window.YTD.imgalt.part0.filter(a => a.tweet.id == va.id)[0].tweet.description[lastIdx])!='undefined')?markupPost(window.YTD.imgalt.part0.filter(a => a.tweet.id == va.id)[0].tweet.description[lastIdx].full_text):'';
                    if(desc.length>0)
                    {
-                     style = altmsg.replaceAll("\_", "-")+"_with-vdo";
-                     vdo += "<div index=\""+lastIdx+"\" class=\"alt-gif"+style+"\">ALT<span id=\"alt-txt\">"+desc+"</span></div>";
+                      style = altmsg.replaceAll("\_", "-")+"_with-vdo";
+                      vdo += "<div index=\""+lastIdx+"\" class=\"alt-gif"+style+"\">ALT<span id=\"alt-txt\">"+desc.replace(/(\r\n|\r|\n)/g, "<br/>")+"</span></div>";
                    }
                  }
                }
@@ -1044,12 +1044,11 @@ function updateMedia(txt, d, index=-1)
                        temps = markupPost(r.tweet.description[k].full_text);
 
                        if(typeof(r.tweet.description[k].index)!='undefined' && z == r.tweet.description[k].index)
-                      desc[r.tweet.description[k].index] = "<div index=\""+r.tweet.description[k].index+"\" class=\"alt-left"+mode+"\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
+                      desc[r.tweet.description[k].index] = "<div index=\""+r.tweet.description[k].index+"\" class=\"alt-left"+mode+"\">ALT<span id=\"alt-txt\">"+temps.replace(/(\r\n|\r|\n)/g, "<br/>")+"</span></div>";
                     
                     if(typeof(r.tweet.description[k].index)=='undefined')
-                    {
                        desc[desc.length] = "<div class=\"alt-left\">ALT<span id=\"alt-txt\">"+temps+"</span></div>";
-                    }
+
                   }
                  }
               });
@@ -1183,10 +1182,10 @@ function markupPost(d)
   else
   {
     if(typeof(d)=="string") words = d;
-    else if(typeof(d.like)!='object')
-      words = d.like.fullText;
-    else if(typeof(d.tweet)=='object')
-      words = d.tweet.full_text;
+    else if(typeof(d.like)!='undefined')
+      words = ((typeof(d.like.fullText)!='undefined')?d.like.fullText:"");
+    else if(typeof(d.tweet)!='undefined')
+      words = ((typeof(d.tweet.full_text)!='undefined')?d.tweet.full_text:"");
     if(words.length>0)
     {
       links = words.match(new RegExp(/(http|https)\:\/\/[a-zA-Z0-9\/\_\-\.\#\&\?\+]+/g));
@@ -1195,7 +1194,7 @@ function markupPost(d)
         if(links.length>0)
         {
           links.forEach(e => {
-            words = words.replace(e, "<a class=\"default-link\" target=\"_blank\" href=\""+e+"\">"+e.substring(0,38)+((e.length>38)?"...":"")+"</a>");
+            words = words.replace(e, "<a class=\"default-link\" target=\"_blank\" href=\""+e+"\">"+e.substring(0,40)+((e.length>40)?"...":"")+"</a>");
           });
         }
       }
@@ -1213,7 +1212,7 @@ function markupPost(d)
           words = words.replace(e, "<a class=\"default-link\" target=\"_blank\" href=\"https://twitter.com/"+e.substring(1,e.length)+"\">"+e+"</a>");
         });
       }
-      return words.replace(/(\r\n|\r|\n)/g, "<br/>");
+      return words;
     }
   }
 }
@@ -1364,7 +1363,6 @@ function grabDBinfo()
 
 function browse()
 {
-  temp = "";
   if(window.opt.active_tab=="tweets")
   {
      /* Retweets Posts */
@@ -1712,7 +1710,7 @@ function readData(page)
     {
        if(window.opt.active_tab=="tweets" && window.opt.stats.search.tweets.keyword!=null && window.opt.stats.search.tweets.active)
        {
-           results = window.YTD.tweets.part0.filter(e => (e.tweet.full_text.substring(0,1)!="@" || e.tweet.full_text.substring(0,4)=="RT @") && (e.tweet.full_text.toLowerCase().indexOf(window.opt.stats.search.tweets.keyword.toLowerCase())>=0) || (e.tweet.entities.urls.length>0 && e.tweet.entities.urls.filter(a => a.expanded_url.includes(window.opt.stats.search.tweets.keyword.toLowerCase())).length>0) || (e.tweet.entities.user_mentions.length>0 && e.tweet.entities.user_mentions.filter(a => a.name.toLowerCase().includes(window.opt.stats.search.tweets.keyword.toLowerCase())).length>0));
+           results = window.YTD.tweets.part0.filter(e => (e.tweet.full_text.substring(0,1)!="@" && e.tweet.full_text.toLowerCase().indexOf(window.opt.stats.search.tweets.keyword.toLowerCase())>=0) || (e.tweet.full_text.substring(0,1)!="@" && e.tweet.entities.urls.length>0 && e.tweet.entities.urls.filter(a => a.expanded_url.includes(window.opt.stats.search.tweets.keyword.toLowerCase())).length>0) || (e.tweet.full_text.substring(0,1)!="@" && e.tweet.entities.user_mentions.length>0 && e.tweet.entities.user_mentions.filter(a => a.name.toLowerCase().includes(window.opt.stats.search.tweets.keyword.toLowerCase())).length>0));
           if(window.YTD.retweets.part0.length>0)
           {
               rt = window.YTD.retweets.part0.filter(m => m.tweet.full_text.toLowerCase().indexOf(window.opt.stats.search.tweets.keyword.toLowerCase())>=0 || (m.tweet.entities.urls.length>0 && m.tweet.entities.urls.filter(a => a.expanded_url.indexOf(window.opt.stats.search.tweets.keyword.toLowerCase())>=0).length>0));
