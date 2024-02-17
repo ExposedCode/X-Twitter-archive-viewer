@@ -360,7 +360,6 @@ function FileExists(url, variable=null, callback=null, idx=-1, loop=0)
   
 function loadJS(FILE_URL, feedback=null, async = true)
 {
-  unloadJS(FILE_URL);
   let scriptEle = document.createElement("script");
   scriptEle.setAttribute("id", CryptoJS.MD5(FILE_URL).toString());
   scriptEle.setAttribute("src", FILE_URL);
@@ -538,7 +537,7 @@ function showDialog(message="", type='dialog', title="Information")
                       }
                       else
                       {
-                        //preparePosts(1, true);
+                        preparePosts(1, true);
                         resetMenuState();
                       }
                     })
@@ -567,7 +566,7 @@ function showDialog(message="", type='dialog', title="Information")
                       }
                       else
                       {
-                        //preparePosts(1, true);
+                        preparePosts(1, true);
                         resetMenuState();
                       }
                     });
@@ -1039,7 +1038,7 @@ function updateMedia(txt, d, index=-1)
 
                  for(k=0; k<r.tweet.description.length; k++)
                  {
-                    if(d.tweet.extended_entities.media[z].media_url.substring(d.tweet.extended_entities.media[z].media_url.lastIndexOf("\/")+1) === r.tweet.description[k].media_url.substring(r.tweet.description[k].media_url.lastIndexOf("\/")+1))
+                    if(d.tweet.extended_entities.media[z].media_url.substring(d.tweet.extended_entities.media[z].media_url.lastIndexOf("\/")+1) == r.tweet.description[k].media_url.substring(r.tweet.description[k].media_url.lastIndexOf("\/")+1))
                     {
                        temps = markupPost(r.tweet.description[k].full_text);
 
@@ -1091,9 +1090,11 @@ function updateMedia(txt, d, index=-1)
             else if(z==3)
               iTxt += "<img class=\"img-prev_forth-4th"+(typeof(idName)!='undefined'?idName:"")+"\" src=\""+imgFname+"\"/>";
           }
+          
         }
         }
   }
+  
   if(typeof(iTxt)!='undefined' && iTxt.length>0)
   {
       if(typeof(idName)=='undefined')
@@ -1153,9 +1154,11 @@ function markupPost(d)
       txt = d.like.fullText;
     else if(typeof(d.tweet)!='undefined')
       txt = d.tweet.full_text;
+    else if(typeof(d)=="string")
+      txt = d;
     if(txt.length>0)
     {
-      txt = txt.replace(new RegExp(/(http[s]\:\/\/[a-zA-Z0-9\/\_\-\.\#\&\?\+\%]+)|(\@[a-zA-Z0-9\_\-\.]+)|(\#[a-zA-Z0-9\_\-]+)|([a-zA-Z0-9_'\-&]+)/ig), function(word, tag)
+      txt = txt.replace(new RegExp(/(http[s]\:\/\/[a-zA-Z0-9\/\_\-\.\#\&\?\=\+\%]+)|(\@[a-zA-Z0-9\_\-\.]+)|(\#[a-zA-Z0-9\_\-]+)|([a-zA-Z0-9_'\-&]+)/ig), function(word, tag)
       {
         subj = (word.toLowerCase().indexOf(searchKey.toLowerCase())>=0)?word.substring(word.toLowerCase().indexOf(searchKey.toLowerCase()), word.toLowerCase().indexOf(searchKey.toLowerCase())+searchKey.length):null;
         if(subj!=null) subj = word.replace(subj, "<b><i style=\"color: "+window.opt.keywordHilite+"\">"+subj+"</i></b>");
@@ -1188,7 +1191,7 @@ function markupPost(d)
       words = ((typeof(d.tweet.full_text)!='undefined')?d.tweet.full_text:"");
     if(words.length>0)
     {
-      links = words.match(new RegExp(/(http|https)\:\/\/[a-zA-Z0-9\/\_\-\.\#\&\?\+]+/g));
+      links = words.match(new RegExp(/(http|https)\:\/\/[a-zA-Z0-9\/\_\-\.\#\&\?\=\+]+/g));
       if(links!=null)
       {
         if(links.length>0)
@@ -1771,7 +1774,6 @@ function readData(page)
        else if(window.opt.active_tab=="replies" && window.opt.stats.search.replies.keyword!==null  && window.opt.stats.search.replies.active)
        {
            results = window.YTD.tweets.part0.filter(e => ((e.tweet.entities.user_mentions.filter(a => a.name.toLowerCase().indexOf(window.opt.stats.search.replies.keyword.toLowerCase()) > -1).length>0) && e.tweet.full_text.substring(0,1)=="@" && !e.tweet.full_text.toLowerCase().includes(window.opt.stats.search.replies.keyword.toLowerCase())) || (e.tweet.full_text.toLowerCase().includes(window.opt.stats.search.replies.keyword.toLowerCase()) && e.tweet.full_text.substring(0,1)=="@") || (e.tweet.entities.urls.filter(a => a.expanded_url.includes(window.opt.stats.search.replies.keyword.toLowerCase())).length>0 && e.tweet.full_text.substring(0,1)=="@"));
-
            idx = 0;
            counter = 0;
            if(results.length>0)
@@ -1871,6 +1873,7 @@ function preparePosts(page=1, refresh=false)
   {
     dir = window.opt.data_folder.split("/");
     tweetJS = dir[0]+"/"+window.__THAR_CONFIG.dataTypes.tweets.files[0].fileName.substring(window.__THAR_CONFIG.dataTypes.tweets.files[0].fileName.lastIndexOf("/")+1);
+    unloadJS(tweetJS);
     if(window.YTD.tweets.part0.length==0)
     {
       /* loaded at initial load */
