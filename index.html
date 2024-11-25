@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Android ACode editor by Foxdebug">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"/>
+<meta name="title" description="Twitter Data Archives Offline Viewer 1.0" />
+<link rel="stylesheet" type="text/css" href="scripts/css/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="scripts/css/jquery-ui/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="scripts/css/fontawesome/css/font-awesome.min.css" />
+<link type="text/css" href="scripts/css/profile.common.css" rel="stylesheet"/>
+<link id="ec0d1bc72b6f76e97f5afcc75b22559e" rel="stylesheet" type="text/css" href="scripts/css/profile.mobile.css" disabled />
+<link id="2b2f493564cb3a1eb6640e63201c5bf9" rel="stylesheet" type="text/css" href="scripts/css/profile.desktop.css" disabled />
+<script lang="javascript" src="scripts/css/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script lang="javascript" src="scripts/js/jquery-3.5.1.min.js"></script>
+<script lang="javascript" src="scripts/css/jquery-ui/jquery-ui.min.js"></script>
+<script lang="javascript" src="data/manifest.js"></script>
+<script lang="javascript" src="scripts/js/core.js"></script>
+<script lang="javascript" src="scripts/js/md5-min.js"></script>
+<script type="text/javascript" src="scripts/js/main.load.min.js"></script>
+</head>
+<body>
+<div class="container">
+ <div class="row boxes">
+    <div class="card hovercard">
+      <div class="cardheader"></div>
+      <div class="col-2 avatar">
+        <img id="avatar-logo">
+      </div>
+      <button class="col-9 btnFollow">Follow</button>
+      
+      <div class="info">
+        <div class="title">Twitter Account Name</div>
+        <div class="user">@twitter</div>
+        <div class="desc common-text">User Description</div>
+        <ul class="details">
+          <li class="fa fa-map-marker" aria-hidden="true"><span>United States</span></li>
+          <li class="fa fa-globe" aria-hidden="true"><span class="main-content">about.twitter.com</span></li>
+          <!--<li class="fa fa-birthday-cake" aria-hidden="true"><span>Born Jan 1970</span></li>-->
+          <li class="fa fa-calendar" aria-hidden="true"><span>Joined April 2000</span></li>
+        </ul>
+        <ul class="follow">
+          <li class="following" value="0"><a href="#"><span>Following</span></a></li>
+          <li class="followers" value="0"><a href="#"><span>Followers</span></a></li>
+        </ul>
+
+      </div>
+   </div>
+ </div>
+ <ul class="nav nav-tabs nav-underline nav-justified">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" data-bs-target="#nav-tweets" role="tab" aria-controls="nav-tweets" id="nav-tweets-tab" data-bs-toggle="tab" href="#">Tweets</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="nav-replies-tab" data-bs-target="#nav-replies" role="tab" aria-controls="nav-replies" id="nav-replies-tab" data-bs-toggle="tab" href="#">Replies</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="nav-like-tab" data-bs-target="#nav-like" role="tab" aria-controls="nav-like" id="nav-like-tab" data-bs-toggle="tab" href="#">Likes</a>
+      </li>
+      <div class="dropdown setting">
+        <a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false"><i class="fa fa-solid fa-gear"></i></a>
+        <div class="dropdown-menu dropdown-menu-end">
+           <div><a class="dropdown-item" href="#"><i class="fa fa-sort-numeric-asc"></i>Show Oldest First</a>
+           </div>
+           <div><a class="dropdown-item" href="#"><i class="fa fa-retweet"></i>Show Retweets Only&nbsp;&nbsp;</a></div>
+           <div><a class="dropdown-item" href="#"><i class="fa fa-file-image-o"></i>Show Media Only&nbsp;&nbsp;</a></div>
+           <div><a class="dropdown-item" href="#"><i class="fa fa-file-text-o"></i>Show Text Only&nbsp;&nbsp;</a></div>
+           <div><a class="dropdown-item"><i class="fa fa-refresh"></i>Reset Search & Refresh</a></div>
+           <div><a class="dropdown-item"><i class="fa fa-search"></i>Search</a></div>
+           <div><hr class="dropdown-divider"></div>
+           <div><a class="dropdown-item"><i class="fa fa-gears"></i>Settings</a></div>
+         </div>
+      </div>
+    </ul>
+    
+  <div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-tweets" role="tabpanel" aria-labelledby="nav-tweets-tab" tabindex="0">
+      <span id="tweets-data">
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.<br/><br/>Example video
+           <video width="100%" style="border-radius:10px" controls <source src="scripts/css/assets/default/mp4/qLn03zjkBBFt9AlK.mp4" type="video/mp4">Your browser does not support video</video>
+<br/>
+           </span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+       </div>
+       
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus?<br/><br/><div class="single_img-prev"><img id="img-prev_single" src="scripts/css/assets/default/images/example-full.jpg"/>
+             <div class="alt-left">ALT</div>
+           </div></span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+       </div>
+       
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.<br/><br/><div class="double_img-prev"><img class="img-prev_double-1st" src="scripts/css/assets/default/images/example-1st.jpg"/>
+           <img class="img-prev_double-2nd" src="scripts/css/assets/default/images/example-2nd.jpg"/>
+           <div class="alt-left-double-1st">ALT</div>
+           <div class="alt-left-double-2nd">ALT</div>
+           </div></span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+       </div>
+       
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.<br/><br/><div class="triple_img-prev"><img class="img-prev_triple-1st" src="scripts/css/assets/default/images/example-1st.jpg"/><img class="img-prev_triple-2nd" src="scripts/css/assets/default/images/example-2nd.jpg"/><img class="img-prev_triple-3rd" src="scripts/css/assets/default/images/example-3rd.jpg"/>
+           <div class="alt-left-triple-1st">ALT</div>
+           <div class="alt-left-triple-2nd">ALT</div>
+           <div class="alt-left-triple-3rd">ALT</div>
+           </div></span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+       </div>
+
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.<br/><br/><div class="forth_img-prev"><img class="img-prev_forth-1st" src="scripts/css/assets/default/images/example-1st.jpg"/><img class="img-prev_forth-2nd" src="scripts/css/assets/default/images/example-2nd.jpg"/><img class="img-prev_forth-3rd" src="scripts/css/assets/default/images/example-3rd.jpg"/><img class="img-prev_forth-4th" src="scripts/css/assets/default/images/example-full.jpg"/>
+            <div class="alt-left-forth-1st">ALT</div>
+             <div class="alt-left-forth-2nd">ALT</div>
+            <div class="alt-left-forth-3rd">ALT</div>
+            <div class="alt-left-forth-4th">ALT</div>
+           </div></span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+       </div>
+       
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <!-- this retweet only for other people's tweets, don't use if there's for your own post -->
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <div class="tweet-post-acc"><span style="font-weight:bold; margin-right:10px">Title of </span>
+           <span class="common-text greyed-text">@Username • 1 May 2023</span>
+           </div>
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.</span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span>0</span></a></li>
+               <li><a class="fa fa-retweet"><span>0</span></a></li>
+               <li><a class="fa fa-heart-o"><span>0</span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-copy"></i>Copy twitter url</a></div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+         <div class="clearfix"></div>
+       </div>
+       
+       <!-- Like -->
+       <div class="tweet-post">
+         <div class="col-lg-6 px-0">
+           <div class="retweeted"><i class="fa fa-retweet status"></i><span>Retweeted</span></div>
+           <div class="tweet-avatar">
+             <img id="avatar-logo">
+           </div>
+           <div class="tweet-connector">
+           <p class="common-text tweet-post-content"><span>Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero.</span></p>
+           <p class="tweet-post-action common-text">
+               <ul class="post-action-btn">
+                 <li><a class="fa fa-comment-o"><span></span></a></li>
+               <li><a class="fa fa-retweet"><span></span></a></li>
+               <li><a class="fa fa-heart" style="color:red"><span></span></a></li>
+               <li class="dropdown action-btn-last"><a data-bs-toggle="dropdown" href="#" role="link" aria-expanded="false" class="fa fa-share-alt"></a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-link"></i>Open on twitter</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#"><i class="fa fa-info-circle"></i>Show tweet id</a></div>
+                 </div>
+               </li>
+               
+              </ul>
+           </p>
+           </div>
+         </div>
+         <div class="clearfix"></div>
+       </div>
+      </span> 
+      <div class="paging-bottom">
+        <nav>
+         <ul class="pagination">
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false, 1)">1</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,2)">2</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,3)">3</a></li>
+          <li class="page-item"><a class="page-link">4</a></li>
+          <li class="page-item"><a class="page-link">5</a></li>
+          <li id="pagination-pages" class="page-item dropup"><a class="page-link fa fa-angle-double-right" data-bs-toggle="dropdown" role="button" aria-expanded="false" style="font-size:24px">&nbsp;</a>
+            <ul class="dropdown-menu scroll-menu dropdown-menu-end" style="bottom: 0; left: auto;">
+              <li><a class="dropdown-item" href="#">1</a></li>
+             <li><a class="dropdown-item" href="#">2</a></li>
+             <li><a class="dropdown-item" href="#">3</a></li>
+             <li><a class="dropdown-item" href="#">4</a></li>
+             <li><a class="dropdown-item" href="#">5</a></li>
+             <li><a class="dropdown-item" href="#">6</a></li>
+             <li><a class="dropdown-item" href="#">7</a></li>
+             <li><a class="dropdown-item" href="#">8</a></li>
+             <li><a class="dropdown-item" href="#">9</a></li>
+             <li><a class="dropdown-item" href="#">10</a></li>
+            </ul>
+          </li>
+        </ul>
+        </nav>
+      </div>
+  </div>
+  <div class="tab-pane fade" id="nav-replies" role="tabpanel" aria-labelledby="nav-replies-tab" tabindex="0">
+    <!-- dynamic contents -->
+    <span id="replies-data"></span>
+    <div class="paging-bottom">
+        <nav>
+         <ul class="pagination">
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false, 1)">1</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,2)">2</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,3)">3</a></li>
+          <li class="page-item"><a class="page-link">4</a></li>
+          <li class="page-item"><a class="page-link">5</a></li>
+          <li id="pagination-pages" class="page-item dropup"><a class="page-link fa fa-angle-double-right" data-bs-toggle="dropdown" role="button" aria-expanded="false" style="font-size:24px">&nbsp;</a>
+            <ul class="dropdown-menu scroll-menu dropdown-menu-end" style="bottom: 0; left: auto;">
+              <li><a class="dropdown-item" href="#">1</a></li>
+             <li><a class="dropdown-item" href="#">2</a></li>
+             <li><a class="dropdown-item" href="#">3</a></li>
+             <li><a class="dropdown-item" href="#">4</a></li>
+             <li><a class="dropdown-item" href="#">5</a></li>
+             <li><a class="dropdown-item" href="#">6</a></li>
+             <li><a class="dropdown-item" href="#">7</a></li>
+             <li><a class="dropdown-item" href="#">8</a></li>
+             <li><a class="dropdown-item" href="#">9</a></li>
+             <li><a class="dropdown-item" href="#">10</a></li>
+            </ul>
+          </li>
+        </ul>
+        </nav>
+         <!--<a data-bs-toggle="dropdown"  aria-expanded="false" class="btn dropdown-toggle">1/10 of Total Pages</a>
+                 <div class="dropdown-menu dropdown-menu-end">
+                   <div><a class="dropdown-item" href="#">1</a>
+                   </div>
+                   <div><a class="dropdown-item" href="#">2</a></div>
+                   <div><a class="dropdown-item" href="#">3</a></div>
+                 </div>-->
+         
+      </div>
+  </div>
+  <div class="tab-pane fade" id="nav-like" role="tabpanel" aria-labelledby="nav-like-tab" tabindex="0">
+    <!-- dynamic contents -->
+    <span id="like-data"></span>
+    <div class="paging-bottom">
+        <nav>
+         <ul class="pagination">
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false, 1)">1</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,2)">2</a></li>
+          <li class="page-item"><a class="page-link" onclick="javascript:preparePosts(false,3)">3</a></li>
+          <li class="page-item"><a class="page-link">4</a></li>
+          <li class="page-item"><a class="page-link">5</a></li>
+          <li id="pagination-pages" class="page-item dropup"><a class="page-link fa fa-angle-double-right" data-bs-toggle="dropdown" role="button" aria-expanded="false" style="font-size:24px">&nbsp;</a>
+            <ul class="dropdown-menu scroll-menu dropdown-menu-end" style="bottom: 0; left: auto;">
+              <li><a class="dropdown-item" href="#">1</a></li>
+             <li><a class="dropdown-item" href="#">2</a></li>
+             <li><a class="dropdown-item" href="#">3</a></li>
+             <li><a class="dropdown-item" href="#">4</a></li>
+             <li><a class="dropdown-item" href="#">5</a></li>
+             <li><a class="dropdown-item" href="#">6</a></li>
+             <li><a class="dropdown-item" href="#">7</a></li>
+             <li><a class="dropdown-item" href="#">8</a></li>
+             <li><a class="dropdown-item" href="#">9</a></li>
+             <li><a class="dropdown-item" href="#">10</a></li>
+            </ul>
+          </li>
+        </ul>
+        </nav>
+      </div>
+  </div>
+  <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">...</div>
+  </div>
+  <div class="imgdesc">
+        <div class="imgdesc-heading">
+          <h2>Image description</h2>
+        </div>
+        <div class="imgdescription">
+          Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero. Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero. Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero. Lorem ipsum dolor sit amet. Est autem voluptas sit inventore impedit et quia ipsum quo officiis repellat et assumenda sapiente aut dolore voluptatibus? 33 quasi accusantium sed labore sunt qui voluptas autem aut eveniet repellendus eos corrupti eaque! Quo placeat numquam sed voluptas autem et exercitationem accusamus eum optio libero. 
+        </div>
+        <div class="btnplate">
+          <button>Dismiss</button>
+        </div>
+  </div>
+ <div class="tabular">
+    <div id="tabs">
+	<ul class="ui-tabs">
+		<li><a href="#main-settings" class="ui-tabs-nav">Search</a></li>
+		<li><a href="#statistic-data" class="ui-tabs-nav">Statistic</a></li>
+		<li><a href="#about-app" class="ui-tabs-nav">About</a></li>
+	</ul>
+	<div id="main-settings">
+     <div class="form-group row">
+            <label for="hilite" style="font-size:12px" class="row">Search hilite font color</label>
+            <input type="text" class="form-control" id="hilite" placeholder="Hilite Color" style="font-size:12px">
+       </div>
+     <div class="form-group row">
+          <label for="data-folder" style="font-size:12px" class="row">Default data folder</label>
+          <input type="text" class="form-control" id="data-folder" placeholder="Default data folder" style="font-size:12px">
+       </div>
+     <div class="form-group row">
+         <label for="viewPerPage" style="font-size:12px" class="row">Records per page</label>
+         <select id="viewPerPage" class="form-control" style="font-size:12px">
+           <option value="8">8 records</option>
+           <option value="10">10 records</option>
+           <option value="12">12 records</option>
+           <option value="15">15 records</option>
+           <option value="20">20 records</option>
+         </select>
+        </div>
+     <div class="form-group row">
+           <div style="font-size:10px" class="row">
+             <br/><br/>Notes :<br/>Please note that this settings only available when you open current html page only, as it won't use any cookies, just using a simple javascript variables.
+           </div>
+        </div>
+	</div>
+	<div id="statistic-data">
+    <h4 style="color: #1DA1F2">Your Twitter data details</h4>
+    <ul>
+      <li>Total records (<i>tweets.js</i>) : <span id="total-records">0 records</span></li>
+      <li>Total tweet posts : <span id="total-posts">0 records</span></li>
+      <li>Total retweets : <span id="total-retweets">0 records</span></li>
+      <li>Total replies : <span id="total-replies">0 records</span></li>
+      <li>Total likes (<i>like.js</i>) : <span id="total-likes">0 records</span></li>
+    </ul>
+	</div>
+	<div id="about-app">
+     <h3 style="color:#1DA1F2">X/Twitter Offline Archive Viewer 2.0</h3>
+     <span>This html & javascript application is only used to view Twitter backup archive data from menu "<i>Settings & Support > Settings and Privacy > Your Account > Download an archive of your data</i>" of your X or Twitter account.<br/>This application was built as an alternative viewer from the original twitter default html & javascript application to make you easier to browse your twitter data similar to the online version.<br/>Scroll down to get an updates & bug fixes 👇<br/><br/>Brought to you by : <a class="default-link" target="_blank" href="https://twitter.com/ExposedMindGame">@ExposedMindGame</a><br/><br/><br/>
+       <h5>Release notes :</h5>
+       <ul>
+         <li>v2.0 New updates :<br/>&nbsp;&nbsp;&nbsp;&nbsp;- Multiple video post js & css bug fix<br/>&nbsp;&nbsp;&nbsp;&nbsp;- Search tweet using post status ID<br/>&nbsp;&nbsp;&nbsp;&nbsp;- Auto embed youtube video when online</li>
+         <li>v1.9 New updates :<br/>&nbsp;&nbsp;&nbsp;&nbsp;- Major javascript updates, bug fixes, and<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Multimedia CSS layout updates<br/>&nbsp;&nbsp;&nbsp;&nbsp;- New filter text only data</li>
+         <li>v1.8 Added new features :<br/>&nbsp;&nbsp;&nbsp;&nbsp;- New JSON dataset on uncensored<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;retweets</li>
+         <li>v1.7 Added new features :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- New image description</li>
+         <li>v1.5 Added features :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;- New multimedia filter menu</li>
+       </ul>
+       <br/>Download bug fixes & data updates :<br/>• <a class="default-link" target="_blank" href="https://bit.ly/twitter-viewer-update">https://bit.ly/twitter-viewer-update</a>
+    </span>
+	</div>
+</div>
+  </div>
+</div>
+</body>
+</html>
