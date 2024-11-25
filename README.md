@@ -8,7 +8,7 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 - [x] [Opera] Android version
 
 ## Version
-- 1.9 release version
+- 2.0 release version
 
 ## How to use
 - Download your X Twitter archives from menu Settings & Support > Settings and Privacy > Your Account > Download an archive of your data
@@ -16,6 +16,10 @@ XTwitter offline viewer can be used to replace your existing JSON XTwitter archi
 - Run index.html on Opera browser using file:///storage/emulated/0/Your_Android_App_Folder/index.html
 
 # Update notes & bug fixes
+- v2.0 New features :
+   - Multiple video post js & css bug fix
+   - Search tweet using post status ID
+   - Auto embed youtube video when online
 - v1.9 New features :
    - Major javascript updates, bug fixes, and Multimedia CSS layout updates
    - New filter menu to sort text only posts
