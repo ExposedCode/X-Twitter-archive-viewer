@@ -1,4 +1,4 @@
-Twitter Offline Archive Viewer v1.9
+Twitter Offline Archive Viewer v2.0
 
 This html application is used for viewing twitter data archives downloaded from your twitter account.
 Current beta version is only tested work at android 4 Jelly Bean & android 10 Marshmellow, any other platform has not been tested for web browser css & javascript compatibility.
@@ -48,6 +48,11 @@ v1.8 added features :
 v1.9 added features :
 - Major javascript updates, bug fixes, and Multimedia CSS layout updates
 - New tweet filter without images
+
+v2.0 added features :
+- Multiple video post js & css bug fix
+- Search tweet using post status ID
+- Auto embed youtube video when online
 
 Notes :
 For the example on how this javascript app work, you can visit this link :
