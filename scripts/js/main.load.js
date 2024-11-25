@@ -2,7 +2,7 @@
 /*    XTwitter offline archive viewer    */
 /*              Version 2.0              */
 /*                                       */
-/*    Code Author : @ExposedMindGame     */
+/*      Code Author : @ExposedCode       */
 /*#######################################*/
 
 window.YTD = {
