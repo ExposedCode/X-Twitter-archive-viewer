@@ -1,6 +1,6 @@
 /*#######################################*/ 
 /*    XTwitter offline archive viewer    */
-/*              Version 1.9              */
+/*              Version 2.0              */
 /*                                       */
 /*    Code Author : @ExposedMindGame     */
 /*#######################################*/
